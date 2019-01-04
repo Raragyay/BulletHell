@@ -5,7 +5,7 @@ import pygame
 
 from src.components.PVector import PVector
 from src.player import Player
-from src.States.State import State
+from src.states.state import State
 from src.components.background import Background
 from src.constants import MUSIC, MAPS
 from src.enemies.enemy_dict import enemy_dict
@@ -163,10 +163,19 @@ class Level(State):
                         self.player_1.weapon_time = pygame.time.get_ticks()  # Counter for when to switch to strong
                         # weapon
 
+                if event.key == self.controls['1p_button_b']:
+                    if self.player_1.alive():
+                        self.player_1.activate_bomb()
+
                 if event.key == self.controls['2p_button_a']:
                     if self.player_2.alive():  # Player 1 is actually playing
                         self.player_2.weapon_time = pygame.time.get_ticks()  # Counter for when to switch to strong
                         # weapon
+
+                if event.key == self.controls['2p_button_b']:
+                    if self.player_2.alive():
+                        self.player_2.activate_bomb()
+
             elif event.type == pygame.KEYUP:
                 if event.key == self.controls['1p_button_a']:
                     if self.player_1.alive():

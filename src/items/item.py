@@ -8,7 +8,7 @@ from src.constants import HEIGHT, WIDTH
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from src.States.level import Level
+    from src.states.level import Level
 
 
 class Item(pygame.sprite.Sprite):
@@ -31,7 +31,7 @@ class Item(pygame.sprite.Sprite):
     def check_oob(self):
         a = self.rect
         if a.top > HEIGHT or a.bottom < 0 or a.left > WIDTH or a.right < 0:
-            print("dead")
+            # print("dead")
             self.kill()
 
     def move(self):

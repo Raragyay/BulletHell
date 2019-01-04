@@ -8,7 +8,7 @@ import pygame
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from src.States.level import Level
+    from src.states.level import Level
 from src.components.PVector import PVector
 from src.constants import GFX, SFX
 from src.items.item import Item

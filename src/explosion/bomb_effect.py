@@ -12,7 +12,7 @@ from src.items.bullet_coin import BulletCoin
 
 if TYPE_CHECKING:
     from src.player import Player
-    from src.States.level import Level
+    from src.states.level import Level
 
 
 class BombEffect(pygame.sprite.Sprite):
@@ -29,7 +29,7 @@ class BombEffect(pygame.sprite.Sprite):
     def update(self):
         self.hurt_enemies()
         self.destroy_bullets()
-        self.frame -= 1
+        self.frame +=1
         if self.frame % 4 == 1:
             self.image = next(self.images)
         if self.frame >= self.bomb_timer:
@@ -39,6 +39,8 @@ class BombEffect(pygame.sprite.Sprite):
     def destroy_bullets(self):
         for bullet in self.game.enemy_bullets:
             BulletCoin(self.game, bullet.pos)
+            bullet.kill()
 
     def hurt_enemies(self):
-        pass
+        for enemy in self.game.enemies:
+            enemy.take_bomb_damage()

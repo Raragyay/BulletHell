@@ -37,6 +37,9 @@ class Enemy(pygame.sprite.Sprite):
     def take_damage(self, bullet):
         self.health -= bullet.damage
 
+    def take_bomb_damage(self):
+        self.health -= 15
+
     def update(self):
         self.frame += 1
         self.move()

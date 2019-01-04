@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 from src.items.coin import Coin
 
 if TYPE_CHECKING:
-    from src.States.level import Level
+    from src.states.level import Level
 
 
 class BulletCoin(Coin):

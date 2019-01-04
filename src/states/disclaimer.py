@@ -4,7 +4,7 @@ from typing import List
 
 import pygame
 
-from src.States.State import State
+from src.states.state import State
 from src.constants import CONTROLS, GFX
 from src.components.transition import Transition
 

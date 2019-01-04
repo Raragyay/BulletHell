@@ -3,7 +3,7 @@ from typing import Dict, List
 
 import pygame
 
-from src.States.State import State
+from src.states.state import State
 
 
 class StateMachine:

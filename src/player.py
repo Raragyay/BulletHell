@@ -11,10 +11,11 @@ from src.constants import GFX, SCREENRECT
 from src.components.tools import subsurfaces
 from typing import TYPE_CHECKING
 
+from src.explosion.bomb_effect import BombEffect
 from src.items.powerup import Powerup
 
 if TYPE_CHECKING:
-    from src.States.level import Level
+    from src.states.level import Level
 
 
 class Player(pygame.sprite.Sprite):
@@ -217,10 +218,11 @@ class Player(pygame.sprite.Sprite):
         self.score += 10 + self.weapon_level
 
     def activate_bomb(self):
-        if not self.bomb_on and not self.explosion and self.bomb_num>=1:
-            self.invincible=True
-            self.bomb_num-=1
-            self.bomb_on=True
+        if not self.bomb_on and not self.explosion and self.bomb_num >= 1:
+            self.invincible = True
+            self.bomb_num -= 1
+            self.bomb_on = True
+            BombEffect(self, self.game)
 
     def update(self):
         if not self.explosion:

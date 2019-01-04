@@ -4,8 +4,8 @@ import sys
 import pygame
 
 from src import constants
-from src.States.disclaimer import Disclaimer
-from src.States.level import Level
+from src.states.disclaimer import Disclaimer
+from src.states.level import Level
 from src.state_machine import StateMachine
 
 
