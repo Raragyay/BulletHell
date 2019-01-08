@@ -7,7 +7,7 @@ from src.components.PVector import PVector
 from src.player import Player
 from src.states.state import State
 from src.components.background import Background
-from src.constants import MUSIC, MAPS
+from src.constants import MUSIC, MAPS, SFX
 from src.enemies.enemy_dict import enemy_dict
 from src.explosion.bullet_explosion import BulletExplosion
 
@@ -37,6 +37,13 @@ class Level(State):
 
         self.enemy_spawn_dict: Dict = MAPS[f"map{level_num}"]
 
+        # This is used if the player wants to join midway through the game, or if they die.
+        self.player_1_choose: bool = False
+        self.player_1_choose_time: int = 60 * 20  # 20 seconds to choose
+        self.player_2_choose: bool = False
+        self.player_2_choose_time: int = 60 * 20
+        self.choice = {'1p': 0, '2p': 0}
+
     def startup(self, persist: dict):
 
         self.players.empty()
@@ -51,9 +58,9 @@ class Level(State):
 
         self.set_music()
         # TODO TEMP
-        self.player_1 = Player(self, 1, PVector(150, 700), self.players)
+        self.player_1 = Player(self, 1, PVector(150, 700))
 
-        self.player_2 = Player(self, 4, PVector(450, 700), self.players)
+        self.player_2 = Player(self, 4, PVector(450, 700))
 
     def update(self):
         self.frame += 1
@@ -158,23 +165,65 @@ class Level(State):
 
         for event in events:
             if event.type == pygame.KEYDOWN:
+                if event.key in {self.controls['1p_coin'], self.controls['2p_coin']}:
+                    SFX['coin'].play()
+                    self.coins += 1
+
+                if event.key == self.controls['1p_start']:
+                    if not self.player_1.alive() and not self.player_1_choose and self.coins > 0:
+                        self.coins -= 1
+                        self.player_1_choose = True
+                        # TODO if all are dead and currently asking whether to continue or not, stop asking
+                        self.choice['1p'] = 1
+
+                if event.key == self.controls['2p_start']:
+                    if not self.player_2.alive() and not self.player_2_choose and self.coins > 0:
+                        self.coins -= 1
+                        self.player_2_choose = True
+                        # TODO see above
+                        self.choice['2p'] = 2
+
+                if event.key in [self.controls[x] for x in ['1p_up', '1p_down', '1p_left', '1p_right']]:
+                    if self.player_1_choose:
+                        self.choice['1p'] = (self.choice['1p'] + 2) % 4  # Alternate between 1 and 3
+
+                if event.key in [self.controls[x] for x in ['2p_up', '2p_down', '2p_left', '2p_right']]:
+                    if self.player_1_choose:
+                        self.choice['2p'] = self.choice['2p'] % 4 + 2  # Alternate between 2 and 4
+
                 if event.key == self.controls['1p_button_a']:
                     if self.player_1.alive():  # Player 1 is actually playing
                         self.player_1.weapon_time = pygame.time.get_ticks()  # Counter for when to switch to strong
                         # weapon
+                    if self.player_1_choose:
+                        self.player_1 = Player(self, self.choice['1p'], PVector(150, 700))
+                        self.player_1_choose = False
+                        self.player_1_choose_time = 60 * 20
 
                 if event.key == self.controls['1p_button_b']:
                     if self.player_1.alive():
                         self.player_1.activate_bomb()
+                    if self.player_1_choose:
+                        self.player_1 = Player(self, self.choice['1p'], PVector(150, 700))
+                        self.player_1_choose = False
+                        self.player_1_choose_time = 60 * 20
 
                 if event.key == self.controls['2p_button_a']:
                     if self.player_2.alive():  # Player 1 is actually playing
                         self.player_2.weapon_time = pygame.time.get_ticks()  # Counter for when to switch to strong
                         # weapon
+                    if self.player_2_choose:
+                        self.player_2 = Player(self, self.choice['2p'], PVector(450, 700))
+                        self.player_2_choose = False
+                        self.player_2_choose_time = 60 * 20
 
                 if event.key == self.controls['2p_button_b']:
                     if self.player_2.alive():
                         self.player_2.activate_bomb()
+                    if self.player_2_choose:
+                        self.player_2 = Player(self, self.choice['2p'], PVector(450, 700))
+                        self.player_2_choose = False
+                        self.player_2_choose_time = 60 * 20
 
             elif event.type == pygame.KEYUP:
                 if event.key == self.controls['1p_button_a']:

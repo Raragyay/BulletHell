@@ -24,8 +24,8 @@ class Private0(Enemy):
         self.rect = self.image.get_rect(center=tuple(self.starting_pos))
 
         self.hitbox.image = pygame.Surface((20, 20))
-        self.hitbox.rect = self.hitbox.image.get_rect(
-            center=(self.pos.x, self.pos.y - 6))  # hit box is the "engine" part
+        self.hitbox.rect :pygame.Rect= self.hitbox.image.get_rect(
+                center=(self.pos.x, self.pos.y - 6))  # hit box is the "engine" part
 
     def move(self):
         if self.starting_pos == self.target_pos:  # how could this happen to me
@@ -55,9 +55,10 @@ class Private0(Enemy):
             e = self.target_pos
             a = (s.y - e.y) / ((s.x - e.x) ** 2)
             f = lambda x: a * (x - e.x) ** 2 + e.y
+            inverse_f = lambda y: sqrt(abs(y - e.y) / a) + e.x  # Doesn't work because it's not a function
             new_x = self.pos.x + copysign(
-                max(2/a/self.pos.x, ((self.pos.x-self.target_pos.x)/200)**2),
-                self.target_pos.x - self.starting_pos.x)  # TODO fix speed
+                    2 / a / max(abs(self.pos.x - e.x), a / 100),
+                    self.target_pos.x - self.starting_pos.x)  # TODO fix speed
             # the speed will be minimum self.speed and will occur between +-100 pixels of the target
             new_y = f(new_x)
             new_pos = PVector(new_x, new_y)

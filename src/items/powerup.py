@@ -12,17 +12,18 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from src.player import Player
+    from src.states.level import Level
 
 
 class Powerup(Item):
     speed = 2
 
-    def __init__(self, game, pos):
+    def __init__(self, game: Level, pos):
         super().__init__(game, pos)
-        #print("spawned powerup")
+        # print("spawned powerup")
         f = self.game.frame % 4
         self.direction: PVector = PVector(copysign(1, f % 3 - 1), copysign(1, f // 2 - 1)) * self.speed
-        # this results in -1,-1 1,-1 1,1 -1,1 * speed for 0-3
+        # this results in (-1,-1) (1,-1) (1,1) (-1,1) * speed for 0-3, effectively "randomizing" the direction
         self.images = cycle([GFX[f'power{x}'] for x in range(1, 7)])
         self.image: pygame.Surface = next(self.images)
         self.rect = self.image.get_rect(center=tuple(self.pos))
@@ -35,23 +36,23 @@ class Powerup(Item):
     def update_img(self):
         self.frame += 1
         if self.frame % 4 == 1:
-            #print("updating image")
+            # print("updating image")
             self.image = next(self.images)
 
     def check_oob(self):
         a = self.rect
         if self.frame < 3600:  # 1 minute
             if a.bottom >= HEIGHT or a.top <= 0:
-                #print("flip_y")
+                # print("flip_y")
                 self.direction.flip_y(in_place=True)
             if a.right >= WIDTH or a.left <= 0:
-                #print("flip_x")
+                # print("flip_x")
                 self.direction.flip_x(in_place=True)
         else:
             super().check_oob()
 
     def apply_effect(self, player: Player):
-        #print(f"collected at {self.pos}")
+        # print(f"collected at {self.pos}")
         SFX['powerup'].play()
         if player.weapon_level <= 7:
             player.weapon_level += 1

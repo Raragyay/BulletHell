@@ -1,4 +1,5 @@
 # coding=utf-8
+from __future__ import annotations
 import sys
 from typing import Dict, List
 
@@ -19,8 +20,8 @@ if TYPE_CHECKING:
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, game, id: int, pos: PVector, *groups):
-        super().__init__(*groups)
+    def __init__(self, game: Level, id: int, pos: PVector):
+        super().__init__(game.players)
 
         self.id: int = id
         self.speed: int = 5
@@ -55,7 +56,7 @@ class Player(pygame.sprite.Sprite):
         self.weapon_level = 1
         self.bullets = pygame.sprite.Group()
         self.weapon_charge_up_time = 1000
-        self.weapon_time = sys.maxsize
+        self.weapon_time = pygame.time.get_ticks()
 
         self.weapon_1 = False
         self.weapon_1_cooldown = 0
@@ -78,7 +79,8 @@ class Player(pygame.sprite.Sprite):
                 "default": cycle([GFX["cricket10"], GFX['cricket11'], GFX['cricket12'], GFX['cricket11']]),
                 "left"   : cycle([GFX["cricket13"], GFX['cricket14'], GFX['cricket15'], GFX['cricket14']]),
                 "right"  : cycle(
-                    [flip(GFX["cricket13"]), flip(GFX['cricket14']), flip(GFX['cricket15']), flip(GFX['cricket14'])])
+                        [flip(GFX["cricket13"]), flip(GFX['cricket14']), flip(GFX['cricket15']),
+                         flip(GFX['cricket14'])])
             }
             self.explosion_anim = subsurfaces(GFX['player_explosion_1'], (0, 0), (90, 90), 10)
         elif self.id == 2:
@@ -86,8 +88,9 @@ class Player(pygame.sprite.Sprite):
                 'default': cycle([GFX['cricket20'], GFX['cricket21'], GFX['cricket22'], GFX['cricket21']]),
                 'left'   : cycle([GFX['cricket23'], GFX['cricket24'], GFX['cricket25'], GFX['cricket24']]),
                 'right'  : cycle(
-                    [flip(GFX['cricket23']), flip(GFX['cricket24']), flip(GFX['cricket25']),
-                     flip(GFX['cricket24'])])}
+                        [flip(GFX['cricket23']), flip(GFX['cricket24']), flip(GFX['cricket25']),
+                         flip(GFX['cricket24'])])
+            }
 
             self.explosion_anim = subsurfaces(GFX['player_explosion_1'], (0, 0), (90, 90), 10)
 
@@ -96,18 +99,20 @@ class Player(pygame.sprite.Sprite):
                 'default': cycle([GFX['locust10'], GFX['locust11'], GFX['locust12'], GFX['locust11']]),
                 'left'   : cycle([GFX['locust13'], GFX['locust14'], GFX['locust15'], GFX['locust14']]),
                 'right'  : cycle(
-                    [flip(GFX['locust13']), flip(GFX['locust14']),
-                     flip(GFX['locust15']),
-                     flip(GFX['locust14'])])}
+                        [flip(GFX['locust13']), flip(GFX['locust14']),
+                         flip(GFX['locust15']),
+                         flip(GFX['locust14'])])
+            }
             self.explosion_anim = subsurfaces(GFX['player_explosion_2'], (0, 0), (90, 90), 10)
         elif self.id == 4:
             self.image_dict = {
                 'default': cycle([GFX['locust20'], GFX['locust21'], GFX['locust22'], GFX['locust21']]),
                 'left'   : cycle([GFX['locust23'], GFX['locust24'], GFX['locust25'], GFX['locust24']]),
                 'right'  : cycle(
-                    [flip(GFX['locust23']), flip(GFX['locust24']),
-                     flip(GFX['locust25']),
-                     flip(GFX['locust24'])])}
+                        [flip(GFX['locust23']), flip(GFX['locust24']),
+                         flip(GFX['locust25']),
+                         flip(GFX['locust24'])])
+            }
             self.explosion_anim = subsurfaces(GFX['player_explosion_2'], (0, 0), (90, 90), 10)
 
         self.images = self.image_dict['default']
@@ -230,12 +235,12 @@ class Player(pygame.sprite.Sprite):
             self.fire_weapons()
             self.cycle_img()
             self.check_invincible()
-            self.bullets.update()
             self.move()
             self.move_hitbox()
             # print(self.bullets)
         else:
             self.keep_exploding()
+        self.bullets.update()
 
     def draw(self, surface):
         self.bullets.draw(surface)

@@ -14,6 +14,7 @@ class PlayerBullet(Bullet):
 
     def __init__(self, player, angle, offset: PVector, *group):
         super().__init__(*group)
+        self.player = player
         self.pos = player.pos + offset + player.direction.x * PVector(3, 0) - PVector(3, 25)
         if player.id in {1, 2}:
             self.pos -= PVector(0, 10)
@@ -21,7 +22,7 @@ class PlayerBullet(Bullet):
             if player.direction.x == 0:
                 PlayerBullet.rotation = 0
             else:
-                PlayerBullet.rotation -= player.direction.x  # Slowly rotate to the side if locust
+                PlayerBullet.rotation -= player.direction.x * 2  # Slowly rotate to the side if locust
             angle += PlayerBullet.rotation
 
         # print(adjusted_angle)
@@ -32,6 +33,10 @@ class PlayerBullet(Bullet):
         self.damage = 0
         self.init_image(player, angle)
         self.calc_damage(player)
+
+    def reset_angle_check(self):
+        if self.player.id in {3, 4} and self.player.direction.x == 0:
+            PlayerBullet.rotation = 0
 
     def init_image(self, player, angle):
         img_level = max(player.weapon_level // 2, 1)
@@ -48,6 +53,7 @@ class PlayerBullet(Bullet):
             self.damage = 0.8 + player.weapon_level / 2.0
 
     def update(self):
+        self.reset_angle_check()
         self.pos += self.direction
         self.rect.center = tuple(self.pos)
         self.check_oob()
