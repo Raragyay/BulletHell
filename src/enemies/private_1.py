@@ -12,16 +12,17 @@ from src.items.coin import Coin
 
 
 class Private1(Enemy):
+    speed = 2
+
     def __init__(self, game, pos):
         super().__init__(game, pos)
         self.health = 20
-        self.speed = 2
         self.target = self.find_target_pos()
         self.image = GFX['e_private1_body']
         self.orig_image = GFX['e_private1_body']
         self.turret_image = GFX['e_private1_turret']
-        self.gun_image=GFX['e_private1_gun']
-        self.direction = PVector(0, self.speed)
+        self.gun_image = GFX['e_private1_gun']
+        self.direction = PVector(0, Private1.speed)
         self.rect = self.image.get_rect(center=tuple(self.pos))
         self.radius = self.image.get_width() / 2
 
@@ -30,6 +31,7 @@ class Private1(Enemy):
         self.bullet_pos: PVector = None
 
     def move(self):
+        #print("Moving")
         self.pos += self.direction
         self.rect.center = tuple(self.pos)
         self.hitbox.rect.center = tuple(self.pos)
@@ -51,7 +53,7 @@ class Private1(Enemy):
         # since "extra" padding is added to the right and the left extra space.
         # It will also be shifted the same value down. Therefore we shift the center back.
         self.image.blit(rot_turret_image, tuple(-top_left_adjust))
-        self.image.blit(self.gun_image,(0,0))
+        self.image.blit(self.gun_image, (0, 0))
 
     def check_death(self):
         if self.rect.top >= HEIGHT:
@@ -68,4 +70,4 @@ class Private1(Enemy):
     def check_shoot(self):
         if self.frame % 90 >= 60 and self.frame % 6 == 1:  # fire 5 times
             # print("shoot")
-            PrivateBullet(self.bullet_pos, self.target, self.game)
+            PrivateBullet(self.game, self.bullet_pos, self.target)

@@ -1,16 +1,22 @@
 # coding=utf-8
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
 from src.bullets.bullet import Bullet
 from src.components.PVector import PVector
 
+if TYPE_CHECKING:
+    from src.states.level import Level
+
 
 class EnemyBullet(Bullet):
-    def __init__(self, pos, game):
+    def __init__(self, game: Level, pos:PVector):
         super().__init__(game.enemy_bullets)
-        self.pos:PVector = pos
-        self.frame=0
+        self.pos: PVector = pos
+        self.frame = 0
 
     def update(self):
-        self.frame+=1
+        self.frame += 1
         self.check_oob()
         self.move()
         self.update_img()
@@ -24,4 +30,3 @@ class EnemyBullet(Bullet):
 
     def update_img(self):
         pass
-

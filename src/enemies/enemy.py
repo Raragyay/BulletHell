@@ -15,7 +15,7 @@ class Enemy(pygame.sprite.Sprite):
         self.health = 0
         self.speed = 0
         self.game = game
-        self.pos = PVector.from_tuple(pos)  # It's a list, but still an iterable
+        self.pos:PVector = pos  # It's a list, but still an iterable
         self.image: pygame.Surface = None
         self.rect: pygame.Rect = None
         self.hitbox: pygame.sprite.Sprite = pygame.sprite.Sprite(game.enemy_hitboxes)

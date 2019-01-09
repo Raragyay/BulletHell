@@ -4,6 +4,7 @@ from typing import List, Dict
 import pygame
 
 from src.components.PVector import PVector
+from src.enemies.enemy import Enemy
 from src.player import Player
 from src.states.state import State
 from src.components.background import Background
@@ -23,6 +24,7 @@ class Level(State):
         self.enemies = pygame.sprite.Group()
         self.enemy_hitboxes = pygame.sprite.Group()
         self.enemy_bullets = pygame.sprite.Group()
+        self.boss:Enemy=pygame.sprite.Sprite()
 
         self.special_effects = pygame.sprite.Group()
         self.items = pygame.sprite.Group()
@@ -77,6 +79,7 @@ class Level(State):
 
         # surface.fill((0, 0, 0))  # TODO switch to background
         self.background.draw(surface)
+        # This calls the draw function instead of just blitting image at rect position.
         [player.draw(surface) for player in self.players]
         self.enemies.draw(surface)
         self.enemy_bullets.draw(surface)
@@ -100,7 +103,7 @@ class Level(State):
         enemies = self.enemy_spawn_dict.get(str(self.frame))
         if enemies:
             for enemy in enemies:
-                enemy_dict[enemy](self, enemies[enemy])
+                enemy_dict[enemy](self, PVector.from_tuple(enemies[enemy]))
 
     def collision_check(self):
         self.bullet_hit_enemy_check()
