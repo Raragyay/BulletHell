@@ -12,7 +12,7 @@ from src.constants import GFX, SCREENRECT
 from src.components.tools import subsurfaces
 from typing import TYPE_CHECKING
 
-from src.explosion.bomb_effect import BombEffect
+from src.special_effects.bomb_effect import BombEffect
 from src.items.powerup import Powerup
 
 if TYPE_CHECKING:

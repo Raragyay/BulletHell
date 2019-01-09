@@ -1,4 +1,5 @@
 # coding=utf-8
+from random import randint
 from typing import List, Dict
 
 import pygame
@@ -10,7 +11,7 @@ from src.states.state import State
 from src.components.background import Background
 from src.constants import MUSIC, MAPS, SFX
 from src.enemies.enemy_dict import enemy_dict
-from src.explosion.bullet_explosion import BulletExplosion
+from src.special_effects.bullet_explosion import BulletExplosion
 
 
 class Level(State):

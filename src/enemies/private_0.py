@@ -6,7 +6,7 @@ import pygame
 from src.components.PVector import PVector
 from src.constants import GFX, HEIGHT, WIDTH
 from src.enemies.enemy import Enemy
-from src.explosion.enemy_explosion import EnemyExplosion
+from src.special_effects.enemy_explosion import EnemyExplosion
 from src.items.coin import Coin
 
 

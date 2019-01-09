@@ -9,9 +9,11 @@ from src.bullets.corporal_bullet import CorporalBullet
 from src.components.PVector import PVector
 from src.constants import GFX, HEIGHT
 from src.enemies.enemy import Enemy
-from src.explosion.enemy_explosion import EnemyExplosion
+from src.special_effects.enemy_explosion import EnemyExplosion
 from src.items.coin import Coin
 from typing import TYPE_CHECKING
+
+from src.special_effects.exhaust import Exhaust
 
 if TYPE_CHECKING:
     from src.states.level import Level
@@ -31,7 +33,7 @@ class Corporal0(Enemy):
         # Pretty much the "main" portion of the ship excluding wings.
         self.hitbox.image: pygame.Surface = pygame.Surface((44, 50))
         self.hitbox.rect: pygame.Rect = self.hitbox.image.get_rect(center=tuple(self.pos))
-        # TODO Exhaust
+        Exhaust(self, PVector(0, -90), 1, True)
 
     def move(self):
         # print("corporal moving")
@@ -43,7 +45,7 @@ class Corporal0(Enemy):
     def check_shoot(self):  # Shoot a circle to try and "trap" the player
         if self.frame % 150 == 0:  # Shoot every 2.5 seconds
             target = self.find_target_pos()
-            angle = (degrees(self.pos.angle_to(target)) + 360) % 360 #So it is between 0 and 360
+            angle = (degrees(self.pos.angle_to(target)) + 360) % 360  # So it is between 0 and 360
             print(angle)
             for i in range(0, 360, 15):
                 a = angle - i

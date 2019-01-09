@@ -7,7 +7,7 @@ from src.bullets.private_bullet import PrivateBullet
 from src.components.PVector import PVector
 from src.constants import GFX, HEIGHT
 from src.enemies.enemy import Enemy
-from src.explosion.enemy_explosion import EnemyExplosion
+from src.special_effects.enemy_explosion import EnemyExplosion
 from src.items.coin import Coin
 
 
