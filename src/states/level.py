@@ -5,6 +5,7 @@ from typing import List, Dict
 import pygame
 
 from src.components.PVector import PVector
+from src.components.hud import Hud
 from src.enemies.enemy import Enemy
 from src.player import Player
 from src.states.state import State
@@ -25,7 +26,7 @@ class Level(State):
         self.enemies = pygame.sprite.Group()
         self.enemy_hitboxes = pygame.sprite.Group()
         self.enemy_bullets = pygame.sprite.Group()
-        self.boss:Enemy=pygame.sprite.Sprite()
+        self.boss: Enemy = pygame.sprite.Sprite()
 
         self.special_effects = pygame.sprite.Group()
         self.items = pygame.sprite.Group()
@@ -46,6 +47,8 @@ class Level(State):
         self.player_2_choose: bool = False
         self.player_2_choose_time: int = 60 * 20
         self.choice = {'1p': 0, '2p': 0}
+
+        self.hud = Hud(self)
 
     def startup(self, persist: dict):
 
@@ -74,6 +77,7 @@ class Level(State):
         self.items.update()
         self.special_effects.update()
         self.enemy_bullets.update()
+        self.hud.update()
         self.collision_check()
 
     def draw(self, surface: pygame.Surface):
@@ -86,6 +90,7 @@ class Level(State):
         self.enemy_bullets.draw(surface)
         self.items.draw(surface)
         self.special_effects.draw(surface)
+        self.hud.draw(surface)
 
     def set_music(self):
         if self.level_num == 1:
@@ -101,6 +106,8 @@ class Level(State):
         # pygame.mixer.music.play(-1)
 
     def spawn_enemies(self):
+        if self.frame%300==0:
+            enemy_dict['3'](self,PVector(randint(150,550),0))
         enemies = self.enemy_spawn_dict.get(str(self.frame))
         if enemies:
             for enemy in enemies:

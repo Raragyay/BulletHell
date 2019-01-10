@@ -45,12 +45,13 @@ class Corporal0(Enemy):
     def check_shoot(self):  # Shoot a circle to try and "trap" the player
         if self.frame % 150 == 0:  # Shoot every 2.5 seconds
             target = self.find_target_pos()
-            angle = (degrees(self.pos.angle_to(target)) + 360) % 360  # So it is between 0 and 360
-            print(angle)
+            angle = (degrees(self.pos.angle_to(target)) + 360) % 360
+            # So it is between 0 and 360, because atan can be negative
+            # print(angle)
             for i in range(0, 360, 15):
                 a = angle - i
                 if abs(a) >= 30:  # 60 degrees around player are empty
-                    print(i)
+                    # print(i)
                     CorporalBullet(self.game, self.pos, i, target)
 
     def check_death(self):

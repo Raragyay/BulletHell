@@ -1,7 +1,12 @@
 # coding=utf-8
+from __future__ import annotations
 import pygame
 
 from src.components.PVector import PVector
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from src.player import Player
 
 
 class Enemy(pygame.sprite.Sprite):
@@ -15,7 +20,7 @@ class Enemy(pygame.sprite.Sprite):
         self.health = 0
         self.speed = 0
         self.game = game
-        self.pos:PVector = pos  # It's a list, but still an iterable
+        self.pos: PVector = pos  # It's a list, but still an iterable
         self.image: pygame.Surface = None
         self.rect: pygame.Rect = None
         self.hitbox: pygame.sprite.Sprite = pygame.sprite.Sprite(game.enemy_hitboxes)
@@ -23,16 +28,16 @@ class Enemy(pygame.sprite.Sprite):
         self.frame = 0
 
     def find_target_pos(self):
-        p1 = self.game.player_1
-        p2 = self.game.player_2
-        if p1.alive() and p2.alive():
+        p1: Player = self.game.player_1
+        p2: Player = self.game.player_2
+        if p1.alive() and not p1.explosion and p2.alive() and not p2.explosion:
             return min(p1.pos, p2.pos, key=lambda x: self.pos.dist_from(x))
-        elif p1.alive():
+        elif p1.alive() and not p1.explosion:
             return p1.pos
-        elif p2.alive():
+        elif p2.alive() and not p2.explosion:
             return p2.pos
         else:
-            return self.pos
+            return self.pos + PVector(0, 1)  # Shoot downwards when no player alive
 
     def take_damage(self, bullet):
         self.health -= bullet.damage

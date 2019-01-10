@@ -3,7 +3,7 @@ import os
 
 import pygame
 
-from src.components.tools import load_graphics, load_music, load_maps, load_sfx
+from src.components.tools import load_graphics, load_music, load_maps, load_sfx, load_fonts
 
 WIDTH = 600
 HEIGHT = 800
@@ -19,9 +19,14 @@ GRAPHICS_FOLDER = os.path.join(RESOURCE_FOLDER, r'graphics')
 MUSIC_FOLDER = os.path.join(RESOURCE_FOLDER, r'music')
 MAPS_FOLDER = os.path.join(RESOURCE_FOLDER, r'maps')
 SFX_FOLDER = os.path.join(RESOURCE_FOLDER, r'sound')
+FONTS_FOLDER = os.path.join(RESOURCE_FOLDER, r'fonts')
 CONTROLS = os.path.join(RESOURCE_FOLDER, 'controls.json')
 
 GFX = load_graphics(GRAPHICS_FOLDER)
 MUSIC = load_music(MUSIC_FOLDER)
 MAPS = load_maps(MAPS_FOLDER)
 SFX = load_sfx(SFX_FOLDER)
+FONTS = load_fonts(FONTS_FOLDER)
+
+ARCADE_CLASSIC = FONTS['ARCADECLASSIC']
+LOADED_FONTS = {}

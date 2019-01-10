@@ -175,7 +175,7 @@ class Player(pygame.sprite.Sprite):
 
         oob = self.rect.clamp(SCREENRECT)
         if oob != self.rect:  # If we have to move the rectangle to keep it within screen boundaries
-            self.direction.x = 0  # Stop moving to the side
+            #self.direction.x = 0  # Stop moving to the side
             self.rect = oob
             self.pos = PVector.from_tuple(oob.center)
 
@@ -208,7 +208,7 @@ class Player(pygame.sprite.Sprite):
             self.explosion_frame = 0
             self.lives -= 1
             self.weapon_level = 1
-            Powerup(self.game, self.pos)
+            Powerup(self.game, self.pos+PVector(0,-100))
             if self.lives > 0:
                 self.invincible = True
                 self.explosion = False

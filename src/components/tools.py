@@ -29,6 +29,7 @@ def load_music(directory):
         songs[name] = os.path.join(directory, music)
     return songs
 
+
 def load_maps(directory):
     os.chdir(directory)
     maps = {}
@@ -38,6 +39,7 @@ def load_maps(directory):
         with open(file, 'r') as f:
             maps[name] = json.load(f)
     return maps
+
 
 def load_sfx(directory):
     """Load all sfx of extensions found in accept.  Unfortunately it is
@@ -49,6 +51,16 @@ def load_sfx(directory):
         effects[name] = pygame.mixer.Sound(os.path.join(directory, fx))
     return effects
 
+
+def load_fonts(directory):
+    """
+    Calls load_music, since both are just loading file paths
+    :param directory:
+    :return:
+    """
+    return load_music(directory)
+
+
 def subsurfaces(surface: pygame.Surface, start: tuple, size: tuple, columns: int, rows: int = 1):
     surfaces: List[pygame.Surface] = []
     for row in range(rows):
@@ -56,5 +68,3 @@ def subsurfaces(surface: pygame.Surface, start: tuple, size: tuple, columns: int
             location = (start[0] + size[0] * col, start[1] + size[1] * row)
             surfaces.append(surface.subsurface(pygame.Rect(location, size)))
     return surfaces
-
-
