@@ -1,6 +1,7 @@
 # coding=utf-8
 from __future__ import annotations
 import sys
+from math import sqrt
 from typing import Dict, List
 
 import pygame
@@ -124,6 +125,7 @@ class Player(pygame.sprite.Sprite):
 
     def init_hitbox(self):
         self.hitbox.image = pygame.Surface((8, 8))
+        #self.hitbox.image.fill((0,0,0))
         if self.id in {1, 2}:
             # Hitbox is 5 pixels below center
             self.hitbox.rect = self.hitbox.image.get_rect(center=(self.pos.x, self.pos.y + 5))
@@ -170,12 +172,14 @@ class Player(pygame.sprite.Sprite):
             self.image = GFX['cricket'] if self.id in {1, 2} else GFX['locust']
 
     def move(self):
+        if self.direction.x * self.direction.y in {-1, 1}:
+            self.direction *= sqrt(0.5)  # diagonal movement
         self.pos += self.direction * self.speed
         self.rect = self.image.get_rect(center=tuple(self.pos))
 
         oob = self.rect.clamp(SCREENRECT)
         if oob != self.rect:  # If we have to move the rectangle to keep it within screen boundaries
-            #self.direction.x = 0  # Stop moving to the side
+            # self.direction.x = 0  # Stop moving to the side
             self.rect = oob
             self.pos = PVector.from_tuple(oob.center)
 
@@ -208,7 +212,7 @@ class Player(pygame.sprite.Sprite):
             self.explosion_frame = 0
             self.lives -= 1
             self.weapon_level = 1
-            Powerup(self.game, self.pos+PVector(0,-100))
+            Powerup(self.game, self.pos + PVector(0, -100))
             if self.lives > 0:
                 self.invincible = True
                 self.explosion = False
@@ -245,3 +249,4 @@ class Player(pygame.sprite.Sprite):
     def draw(self, surface):
         self.bullets.draw(surface)
         surface.blit(self.image, self.rect)
+       # surface.blit(self.hitbox.image,self.hitbox.rect)
