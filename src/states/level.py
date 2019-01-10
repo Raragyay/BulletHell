@@ -70,9 +70,10 @@ class Level(State):
 
     def update(self):
         self.frame += 1
+        self.player_choose_update()
+        self.background.update()
         self.spawn_enemies()
         self.players.update()
-        self.background.update()
         self.enemies.update()
         self.items.update()
         self.special_effects.update()
@@ -107,7 +108,7 @@ class Level(State):
 
     def spawn_enemies(self):
         if self.frame%300==0:
-            enemy_dict['3'](self,PVector(randint(150,550),0))
+             enemy_dict[f'{randint(1,3)}'](self,PVector(randint(150,550),0))
         enemies = self.enemy_spawn_dict.get(str(self.frame))
         if enemies:
             for enemy in enemies:
@@ -298,3 +299,18 @@ class Level(State):
                     self.player_2.weapon_1 = False
                 else:
                     self.player_2.weapon_1 = True
+
+    def player_choose_update(self):
+        if self.player_1_choose:
+            self.player_1_choose_time -= 1
+            if self.player_1_choose_time <= 0:
+                self.player_1 = Player(self, self.choice['1p'], PVector(150, 700))
+                self.player_1_choose = False
+                self.player_1_choose_time = 20 #Redundant since keyboard input also resets choose time
+
+        if self.player_2_choose:
+            self.player_2_choose_time -= 1
+            if self.player_2_choose_time <= 0:
+                self.player_2 = Player(self, self.choice['2p'], PVector(450, 700))
+                self.player_2_choose = False
+                self.player_2_choose_time = 20 #Redundant since keyboard input also resets choose time
