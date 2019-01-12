@@ -17,8 +17,8 @@ class Enemy(pygame.sprite.Sprite):
     def __init__(self, game, pos):
         super().__init__(game.enemies)
         self.tag = 'enemy'
-        self.health = 0
-        self.speed = 0
+        self.health: int
+        self.speed: int
         self.game = game
         self.pos: PVector = pos  # It's a list, but still an iterable
         self.image: pygame.Surface = None
