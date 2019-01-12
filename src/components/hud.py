@@ -27,23 +27,27 @@ class Hud:
         self.player_1_label = Label('', {"topleft": (0, 25)}, self.labels, font_path=ARCADE_CLASSIC, font_size=25)
         self.player_2_label = Label('', {'topright': (WIDTH, 25)}, self.labels, font_path=ARCADE_CLASSIC, font_size=25)
 
+        self.coin_label = Label(f'credit {self.game.coins}', {'midbottom': (WIDTH // 2, HEIGHT)}, self.labels,
+                                font_path=ARCADE_CLASSIC, font_size=25)
+
         self.player_1_life: pygame.Surface = None
         self.player_2_life: pygame.Surface = None
         self.bomb_img = GFX['bomb1']
 
-        # Shouldn't assign player 1 and player 2 because it could be created by game,
+        # Shouldn't assign player 1 and player 2 fields because it could be created by game,
         # changing the pointer in game but not in hud
 
     def update(self):
         self.set_player_life_pictures()
         self.update_labels()
+        self.coin_label.update_text(f'credit {self.game.coins}')
 
     def draw(self, surface):
         self.layer.fill((0, 0, 0, 0))
         self.labels.draw(self.layer)
         self.draw_player_lives()
         self.draw_bomb_num()
-        surface.blit(self.layer,(0,0))
+        surface.blit(self.layer, (0, 0))
 
     def update_labels(self):
         p1 = self.game.player_1
