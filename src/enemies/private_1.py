@@ -12,17 +12,18 @@ from src.items.coin import Coin
 
 
 class Private1(Enemy):
+    health = 20
     speed = 2
 
     def __init__(self, game, pos):
         super().__init__(game, pos)
-        self.health = 20
+        #self.health = Private1.health
         self.target = self.find_target_pos()
         self.image = GFX['e_private1_body']
         self.orig_image = GFX['e_private1_body']
         self.turret_image = GFX['e_private1_turret']
         self.gun_image = GFX['e_private1_gun']
-        self.direction = PVector(0, Private1.speed)
+        self.direction = PVector(0, self.speed)
         self.rect = self.image.get_rect(center=tuple(self.pos))
         self.radius = self.image.get_width() / 2
 
@@ -31,7 +32,7 @@ class Private1(Enemy):
         self.bullet_pos: PVector = None
 
     def move(self):
-        #print("Moving")
+        # print("Moving")
         self.pos += self.direction
         self.rect.center = tuple(self.pos)
         self.hitbox.rect.center = tuple(self.pos)

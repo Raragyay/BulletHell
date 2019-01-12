@@ -108,7 +108,7 @@ class Level(State):
 
     def spawn_enemies(self):
         if self.frame%300==0:
-             enemy_dict[f'{randint(1,3)}'](self,PVector(randint(150,550),0))
+             enemy_dict[f'1'](self,PVector(randint(150,550),0))
         enemies = self.enemy_spawn_dict.get(str(self.frame))
         if enemies:
             for enemy in enemies:

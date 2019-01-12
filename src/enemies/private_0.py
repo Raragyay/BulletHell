@@ -11,10 +11,11 @@ from src.items.coin import Coin
 
 
 class Private0(Enemy):
+    health = 10
+    speed = 4
+
     def __init__(self, game, pos):
         super().__init__(game, pos)
-        self.health = 10
-        self.speed = 4
         self.starting_pos = PVector.from_tuple(pos)
         self.target_pos = self.find_target_pos()
 
@@ -24,7 +25,7 @@ class Private0(Enemy):
         self.rect = self.image.get_rect(center=tuple(self.starting_pos))
 
         self.hitbox.image = pygame.Surface((20, 20))
-        self.hitbox.rect :pygame.Rect= self.hitbox.image.get_rect(
+        self.hitbox.rect: pygame.Rect = self.hitbox.image.get_rect(
                 center=(self.pos.x, self.pos.y - 6))  # hit box is the "engine" part
 
     def move(self):
@@ -57,7 +58,7 @@ class Private0(Enemy):
             f = lambda x: a * (x - e.x) ** 2 + e.y
             inverse_f = lambda y: sqrt(abs(y - e.y) / a) + e.x  # Doesn't work because it's not a function
             new_x = self.pos.x + copysign(
-                    2 / a / max(abs(self.pos.x - e.x), a / 100),
+                    self.speed / 2 / a / max(abs(self.pos.x - e.x), 1 / a / 2),
                     self.target_pos.x - self.starting_pos.x)  # TODO fix speed
             # the speed will be minimum self.speed and will occur between +-100 pixels of the target
             new_y = f(new_x)
