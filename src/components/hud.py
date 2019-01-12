@@ -33,7 +33,7 @@ class Hud:
         self.player_2_life: pygame.Surface = None
         self.bomb_img = GFX['bomb1']
 
-        # Shouldn't assign player 1 and player 2 fields because it could be created by game,
+        # Shouldn't assign player 1 and player 2 because it could be created by game,
         # changing the pointer in game but not in hud
 
     def update(self):
@@ -45,7 +45,7 @@ class Hud:
         self.labels.draw(self.layer)
         self.draw_player_lives()
         self.draw_bomb_num()
-        surface.blit(self.layer, (0, 0))
+        surface.blit(self.layer,(0,0))
 
     def update_labels(self):
         p1 = self.game.player_1
