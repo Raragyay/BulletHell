@@ -1,5 +1,7 @@
 # coding=utf-8
 from __future__ import annotations
+
+from math import ceil
 from typing import TYPE_CHECKING
 
 import pygame
@@ -54,7 +56,7 @@ class Hud:
                 ship_type = 'cricket'
             else:
                 ship_type = 'locust'
-            p1_text = f'{self.game.player_1_choose_time} ??{ship_type}??'
+            p1_text = f'{ceil(self.game.player_1_choose_time/60)} ??{ship_type}??'
         else:
             if self.game.coins > 0:
                 p1_text = 'press 1p start'
@@ -70,7 +72,7 @@ class Hud:
                 ship_type = 'cricket'
             else:
                 ship_type = 'locust'
-            p2_text = f'{self.game.player_2_choose_time} ??{ship_type}??'
+            p2_text = f'{ceil(self.game.player_2_choose_time/60)} ??{ship_type}??'
         else:
             if self.game.coins > 0:
                 p2_text = 'press 2p start'
