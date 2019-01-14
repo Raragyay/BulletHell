@@ -20,7 +20,7 @@ class PVector:
         self.y = y
 
     def __str__(self):
-        return "PVector (x,y): {},{}".format(self.x, self.y)
+        return "PVector (x,y): {0:.10f},{1:.10f}".format(self.x, self.y)
 
     def __repr__(self):
         return f'{self.x} {self.y}'
