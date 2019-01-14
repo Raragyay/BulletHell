@@ -22,10 +22,11 @@ class Disclaimer(State):
         self.persist = persist
 
     def cleanup(self):
+        persist={}
         with open(CONTROLS, 'r') as file:
-            self.persist["controls"] = json.load(file)
-        self.persist['coins'] = 0
-        return self.persist
+            persist["controls"] = json.load(file)
+        persist['coins'] = 0
+        return persist
 
     def event_process(self, events: List[pygame.event.Event]):
         pass

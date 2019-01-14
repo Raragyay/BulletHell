@@ -36,9 +36,6 @@ class Level(State):
         self.level_num: int = level_num
         self.background: Background = Background(self.level_num)
 
-        self.frame = 0
-        self.coins = 0
-
         self.enemy_spawn_dict: Dict = MAPS[f"map{level_num}"]
 
         # This is used if the player wants to join midway through the game, or if they die.
@@ -107,8 +104,9 @@ class Level(State):
         # pygame.mixer.music.play(-1)
 
     def spawn_enemies(self):
-        if self.frame%300==0:
-             enemy_dict[f'1'](self,PVector(randint(150,550),0))
+        if self.frame%1==0:
+             enemy_dict[f'1'](self,PVector(randint(0,600),0))
+             enemy_dict[f'1'](self,PVector(randint(0,600),0))
         enemies = self.enemy_spawn_dict.get(str(self.frame))
         if enemies:
             for enemy in enemies:
@@ -117,7 +115,7 @@ class Level(State):
     def collision_check(self):
         self.bullet_hit_enemy_check()
         self.player_hit_item_check()
-        self.enemy_hit_player_check()
+        #self.enemy_hit_player_check()
 
     def bullet_hit_enemy_check(self):
         for player in self.players:
