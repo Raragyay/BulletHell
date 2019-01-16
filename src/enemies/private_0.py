@@ -13,7 +13,7 @@ from src.items.coin import Coin
 class Private0(Enemy):
     health = 10
     speed = 4
-    vert_travel_threshold = 1
+    vert_travel_threshold = 10
 
     def __init__(self, game, pos):
         super().__init__(game, pos)
@@ -24,7 +24,7 @@ class Private0(Enemy):
         v = self.target_pos
         # TODO if s.x-v.x=0
         if not abs(s.x - v.x) <= self.vert_travel_threshold:
-            self.a = (s.y - v.y) / ((s.x - v.x) ** 2)
+            self.a: float = float(s.y - v.y) / float(((s.x - v.x) ** 2))
 
         self.image = GFX['e_private0']
         self.orig_image = GFX['e_private0']
@@ -34,7 +34,7 @@ class Private0(Enemy):
 
         self.hitbox.image = pygame.Surface((20, 20))
         self.hitbox.rect: pygame.Rect = self.hitbox.image.get_rect(
-            center=(self.pos.x, self.pos.y - 6))  # hit box is the "engine" part
+                center=(self.pos.x, self.pos.y - 6))  # hit box is the "engine" part
 
     def move(self):
         if self.starting_pos == self.target_pos:  # how could this happen to me
@@ -57,30 +57,40 @@ class Private0(Enemy):
             # else:
             #     self.pos+=PVector(0,self.speed)
         else:
+            a = self.a
+            s = self.starting_pos
+            v = self.target_pos
             # Parabola with destination as vertex
             # equation is y=a(x-end.x)^2+end.y
             # solve for a by subbing in start.x, start.y
             f = lambda x: a * (x - v.x) ** 2 + v.y
 
-            # Goal: delta_x^2 + delta_y^2=speed^2
-            # Known: dy/dx = 2*a*(x-v.x)
-            # Approximate dy=delta_y, dx=delta_x
-            # delta_y=2*a*(x-v.x)*delta_x
-            # Let z=2*a*(x-v.x)
-            # delta_y=z*delta_x
-            # Substitute: delta_x^2+(z*delta_x)^2=speed^2
-            # Expand: delta_x^2+z^2*delta_x^2=speed^2
-            # Collect: (delta_x^2)(1+z^2)=speed^2
-            # Divide: delta_x^2=(speed^2)/(1+z^2)
-            # Take the root: delta_x=sqrt(speed^2/(1+z^2))
-            a = self.a
-            s = self.starting_pos
-            v = self.target_pos
-            z = 2 * a * (self.pos.x - v.x)
-            delta_x = sqrt(self.speed ** 2 / (1 + z ** 2))
+            # Condition: if ship is within 1 pixel of vertex and is approaching it, flip it over to the other side.
+            # This is because the slope of the quadratic as we approach the vertex is very small; therefore, a large
+            # amount of the speed is allocated to delta_x. This results in an enormous shift in delta_y which
+            # effectively makes the ship disappear.
+
+            if v.x - self.pos.x == copysign(v.x - self.pos.x, v.x - s.x) and abs(self.pos.x - v.x) <= 1:
+                delta_x = 2
+            else:
+
+                # Goal: delta_x^2 + delta_y^2=speed^2
+                # Known: dy/dx = 2*a*(x-v.x)
+                # Approximate dy=delta_y, dx=delta_x
+                # delta_y=2*a*(x-v.x)*delta_x
+                # Let z=2*a*(x-v.x)
+                # delta_y=z*delta_x
+                # Substitute: delta_x^2+(z*delta_x)^2=speed^2
+                # Expand: delta_x^2+z^2*delta_x^2=speed^2
+                # Collect: (delta_x^2)(1+z^2)=speed^2
+                # Divide: delta_x^2=(speed^2)/(1+z^2)
+                # Take the root: delta_x=sqrt(speed^2/(1+z^2))
+                z = 2 * a * (self.pos.x - v.x)
+                delta_x = sqrt(self.speed ** 2 / (1 + z ** 2))
             new_x = self.pos.x + copysign(delta_x, v.x - s.x)
             new_y = f(new_x)
 
+            # TODO Problem: when position.x is very close to vertex, slope of derivative is very small, approximation is very inaccurate.
             # inverse_f = lambda y: sqrt(abs(y - v.y) / a) + v.x  # Doesn't work because it's not a function
             # """
             # Potential bug: When Vertex x is very close to current.x, delta x is extremely large.
@@ -92,8 +102,12 @@ class Private0(Enemy):
             # v.x), 1 / a / 2),
             #     v.x - s.x)  # TODO fix speed
             # new_y = f(new_x)
-            self.log += f'Current:{self.pos}, Future:{PVector(new_x,new_y)}, Start:{s}, Vertex:{v}, a-value:{a}\n'
-            assert -50 <= new_x <= 650 and -50 <= new_y <= 850, f'{self.log}{new_x},{new_y}'
+            self.log += f'Current:{self.pos}, Future:{PVector(new_x,new_y)}, Start:{s}, Vertex:{v}, a-value:{a},delta_x:{delta_x}\n'
+            assert -50 <= new_x <= 650 and -50 <= new_y <= 850, f'{self.log}{new_x},{new_y}\n' \
+                                                                f'{new_x-v.x}\n' \
+                                                                f'{(new_x-v.x)**2}\n' \
+                                                                f'{a*(new_x-v.x)**2}\n' \
+                                                                f'{a*(new_x-v.x)**2+v.y}\n'
 
             #
             # delta_x = abs(new_x - self.pos.x)
