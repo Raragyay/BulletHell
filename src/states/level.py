@@ -86,8 +86,8 @@ class Level(State):
         [player.draw(surface) for player in self.players]
         self.enemies.draw(surface)
         self.enemy_bullets.draw(surface)
-        self.items.draw(surface)
         self.special_effects.draw(surface)
+        self.items.draw(surface)
         self.hud.draw(surface)
 
     def set_music(self):
