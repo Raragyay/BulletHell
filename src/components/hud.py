@@ -64,6 +64,7 @@ class Hud:
                 p1_text = 'insert coin'
         self.player_1_label.update_text(p1_text)
 
+
         p2 = self.game.player_2
         if p2.alive():
             p2_text = f'{p2.score}'

@@ -10,4 +10,4 @@ if TYPE_CHECKING:
 class BulletCoin(Coin):
     def __init__(self, game: Level, pos):
         super().__init__(game, pos)
-        self.value /= 10
+        self.value //= 10
