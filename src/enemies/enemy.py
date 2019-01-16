@@ -31,11 +31,11 @@ class Enemy(pygame.sprite.Sprite):
         p1: Player = self.game.player_1
         p2: Player = self.game.player_2
         if p1.alive() and not p1.explosion and p2.alive() and not p2.explosion:
-            return min(p1.pos, p2.pos, key=lambda x: self.pos.dist_from(x))
+            return min(p1.pos, p2.pos, key=lambda x: self.pos.dist_from(x)).copy()
         elif p1.alive() and not p1.explosion:
-            return p1.pos
+            return p1.pos.copy()
         elif p2.alive() and not p2.explosion:
-            return p2.pos
+            return p2.pos.copy()
         else:
             return self.pos + PVector(0, 1)  # Shoot downwards when no player alive
 
