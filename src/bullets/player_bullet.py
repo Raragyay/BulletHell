@@ -15,14 +15,14 @@ class PlayerBullet(Bullet):
     def __init__(self, player, angle, offset: PVector, bullet_level: int):
         super().__init__(player.bullets)
         self.player = player
-        self.pos = player.pos + offset + player.direction.x * PVector(3, 0) - PVector(3, 25)
+        self.pos: PVector = player.pos + offset + player.direction.x * PVector(3, 0) - PVector(3, 25)
         if player.id in {1, 2}:
             self.pos -= PVector(0, 10)
         else:
             if player.direction.x == 0:
                 PlayerBullet.rotation = 0
             else:
-                PlayerBullet.rotation -= player.direction.x * 2  # Slowly rotate to the side if locust
+                PlayerBullet.rotation -= player.direction.x * 2 / player.weapon_level  # Slowly rotate to the side if locust
             angle += PlayerBullet.rotation
 
         # print(adjusted_angle)
@@ -32,6 +32,7 @@ class PlayerBullet(Bullet):
 
         self.damage = 0
         self.bullet_level = bullet_level
+        self.orig_image: pygame.Surface = None
         self.init_image(player, angle)
         self.calc_damage(player)
 
@@ -40,9 +41,9 @@ class PlayerBullet(Bullet):
             PlayerBullet.rotation = 0
 
     def init_image(self, player, angle):
-        self.image = GFX[f'bt{player.id}{self.bullet_level}']
+        self.orig_image = GFX[f'bt{player.id}{self.bullet_level}'].copy()
         rot_angle = angle - 90  # angle with positive y axis as 0 deg
-        self.image = pygame.transform.rotate(self.image, rot_angle)
+        self.image = pygame.transform.rotate(self.orig_image.copy(), rot_angle)
         self.rect = self.image.get_rect(center=tuple(self.pos))
         self.rect.inflate_ip(-5, -5)  # Adjust the hitbox of the bullet to avoid bs hits
 
