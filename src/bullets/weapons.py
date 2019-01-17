@@ -60,6 +60,20 @@ class PlayerWeapon1:
             PlayerBullet(p, 90, back_weapon + back_offset, 2)
             PlayerBullet(p, 90, -back_weapon + back_offset, 2)
             HomingWeapon2(p)
+        elif level==7:
+            PlayerBullet(p, 70, front_weapon, 2)
+            PlayerBullet(p, 80, front_weapon, 1)
+            PlayerBullet(p, 90, front_weapon, 2)
+            PlayerBullet(p, 100, front_weapon, 1)
+            PlayerBullet(p, 110, front_weapon, 2)
+            PlayerBullet(p, 70, -front_weapon, 2)
+            PlayerBullet(p, 80, -front_weapon, 1)
+            PlayerBullet(p, 90, -front_weapon, 2)
+            PlayerBullet(p, 100, -front_weapon, 1)
+            PlayerBullet(p, 110, -front_weapon, 2)
+            PlayerBullet(p, 90, back_weapon + back_offset, 3)
+            PlayerBullet(p, 90, -back_weapon + back_offset, 3)
+            HomingWeapon2(p)
 
 
 class HomingWeapon:
