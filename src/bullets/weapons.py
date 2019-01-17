@@ -11,41 +11,55 @@ back_offset = PVector(0, 20)
 
 class PlayerWeapon1:
     def __init__(self, player):
-        level = player.weapon_level
+        p = player
+        level = p.weapon_level
         if level == 1:  # TODO Add more levels
-            PlayerBullet(player, 90, front_weapon, 1)
-            PlayerBullet(player, 90, -front_weapon, 1)
+            PlayerBullet(p, 90, front_weapon, 1)
+            PlayerBullet(p, 90, -front_weapon, 1)
         elif level == 2:
-            PlayerBullet(player, 90, front_weapon, 1)
-            PlayerBullet(player, 90, -front_weapon, 1)
-            PlayerBullet(player, 90, back_weapon + back_offset, 1)
-            PlayerBullet(player, 90, -back_weapon + back_offset, 1)
+            PlayerBullet(p, 90, front_weapon, 1)
+            PlayerBullet(p, 90, -front_weapon, 1)
+            PlayerBullet(p, 90, back_weapon + back_offset, 1)
+            PlayerBullet(p, 90, -back_weapon + back_offset, 1)
         elif level == 3:
-            PlayerBullet(player, 80, front_weapon, 1)
-            PlayerBullet(player, 100, front_weapon, 1)
-            PlayerBullet(player, 80, -front_weapon, 1)
-            PlayerBullet(player, 100, -front_weapon, 1)
-            PlayerBullet(player, 90, back_weapon + back_offset, 1)
-            PlayerBullet(player, 90, -back_weapon + back_offset, 1)
+            PlayerBullet(p, 80, front_weapon, 1)
+            PlayerBullet(p, 100, front_weapon, 1)
+            PlayerBullet(p, 80, -front_weapon, 1)
+            PlayerBullet(p, 100, -front_weapon, 1)
+            PlayerBullet(p, 90, back_weapon + back_offset, 1)
+            PlayerBullet(p, 90, -back_weapon + back_offset, 1)
         elif level == 4:
-            PlayerBullet(player, 80, front_weapon, 1)
-            PlayerBullet(player, 100, front_weapon, 1)
-            PlayerBullet(player, 80, -front_weapon, 1)
-            PlayerBullet(player, 100, -front_weapon, 1)
-            PlayerBullet(player, 90, back_weapon + back_offset, 2)
-            PlayerBullet(player, 90, -back_weapon + back_offset, 2)
-            HomingWeapon4(player)
+            PlayerBullet(p, 80, front_weapon, 1)
+            PlayerBullet(p, 100, front_weapon, 1)
+            PlayerBullet(p, 80, -front_weapon, 1)
+            PlayerBullet(p, 100, -front_weapon, 1)
+            PlayerBullet(p, 90, back_weapon + back_offset, 2)
+            PlayerBullet(p, 90, -back_weapon + back_offset, 2)
+            HomingWeapon1(p)
         elif level == 5:
-            PlayerBullet(player, 75, front_weapon, 1)
-            PlayerBullet(player, 90, front_weapon, 2)
-            PlayerBullet(player, 105, front_weapon, 1)
-            PlayerBullet(player, 75, -front_weapon, 1)
-            PlayerBullet(player, 90, -front_weapon, 2)
-            PlayerBullet(player, 105, -front_weapon, 1)
-            PlayerBullet(player, 90, back_weapon + back_offset, 2)
-            PlayerBullet(player, 90, -back_weapon + back_offset, 2)
-            HomingWeapon4(player)
-
+            PlayerBullet(p, 75, front_weapon, 1)
+            PlayerBullet(p, 90, front_weapon, 2)
+            PlayerBullet(p, 105, front_weapon, 1)
+            PlayerBullet(p, 75, -front_weapon, 1)
+            PlayerBullet(p, 90, -front_weapon, 2)
+            PlayerBullet(p, 105, -front_weapon, 1)
+            PlayerBullet(p, 90, back_weapon + back_offset, 2)
+            PlayerBullet(p, 90, -back_weapon + back_offset, 2)
+            HomingWeapon1(p)
+        elif level == 6:
+            PlayerBullet(p, 70, front_weapon, 1)
+            PlayerBullet(p, 80, front_weapon, 1)
+            PlayerBullet(p, 90, front_weapon, 2)
+            PlayerBullet(p, 100, front_weapon, 1)
+            PlayerBullet(p, 110, front_weapon, 1)
+            PlayerBullet(p, 70, -front_weapon, 1)
+            PlayerBullet(p, 80, -front_weapon, 1)
+            PlayerBullet(p, 90, -front_weapon, 2)
+            PlayerBullet(p, 100, -front_weapon, 1)
+            PlayerBullet(p, 110, -front_weapon, 1)
+            PlayerBullet(p, 90, back_weapon + back_offset, 2)
+            PlayerBullet(p, 90, -back_weapon + back_offset, 2)
+            HomingWeapon2(p)
 
 
 class HomingWeapon:
@@ -61,13 +75,23 @@ class HomingWeapon:
         raise NotImplementedError("Do not create a raw homing weapon")
 
 
-class HomingWeapon4(HomingWeapon):
+class HomingWeapon1(HomingWeapon):
     def __init__(self, player):
         super().__init__(player)
 
     def fire(self, player):
         PlayerHomingBullet(player, back_weapon + back_offset, 2)
         PlayerHomingBullet(player, -back_weapon + back_offset, 2)
+
+
+class HomingWeapon2(HomingWeapon):
+    def __init__(self, player):
+        super().__init__(player)
+
+    def fire(self, player):
+        PlayerHomingBullet(player, back_weapon + back_offset, 3)
+        PlayerHomingBullet(player, -back_weapon + back_offset, 3)
+
 class PlayerWeapon2:
     def __init__(self, player):
         PlayerLaserBullet(player)

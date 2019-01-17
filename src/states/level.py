@@ -104,9 +104,9 @@ class Level(State):
         # pygame.mixer.music.play(-1)
 
     def spawn_enemies(self):
-        if self.frame%1==0:
-             enemy_dict[f'1'](self,PVector(randint(0,600),0))
-             enemy_dict[f'1'](self,PVector(randint(0,600),0))
+        if self.frame%300==0:
+             #enemy_dict[f'1'](self,PVector(randint(0,600),0))
+             enemy_dict[f'{1}'](self,PVector(randint(0,600),0))
         enemies = self.enemy_spawn_dict.get(str(self.frame))
         if enemies:
             for enemy in enemies:

@@ -10,11 +10,11 @@ from src.components.PVector import PVector
 
 class PlayerHomingBullet(PlayerBullet):
     speed = 5
-    max_speed=15
+    max_speed = 15
 
     def __init__(self, player, offset, bullet_level: int):
         super().__init__(player, 90, offset, bullet_level)
-        self.orig_image: pygame.Surface = pygame.transform.scale(self.orig_image, (self.orig_image.get_width(), 20))
+        self.orig_image: pygame.Surface = pygame.transform.scale(self.orig_image, (20, 50))
         self.rect: pygame.Rect = self.image.get_rect(center=tuple(self.pos))
         self.rect.inflate_ip(-5, -5)  # Just like before
         # A little less tall to distinguish
@@ -26,7 +26,7 @@ class PlayerHomingBullet(PlayerBullet):
         self.determine_target()
 
     def determine_target(self):
-        class default:
+        class default: #This is a default class that has all the variables needed to move the homing bullet upwards.
             class rect:
                 center = (self.pos.x, -100)
 
