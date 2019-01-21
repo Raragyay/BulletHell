@@ -104,9 +104,9 @@ class Level(State):
         # pygame.mixer.music.play(-1)
 
     def spawn_enemies(self):
-        if self.frame%300==0:
-             #enemy_dict[f'1'](self,PVector(randint(0,600),0))
-             enemy_dict[f'{1}'](self,PVector(randint(0,600),0))
+        if self.frame % 300 == 1:
+            # enemy_dict[f'1'](self,PVector(randint(0,600),0))
+            enemy_dict[f'{4}'](self, PVector(randint(0, 600), 0))
         enemies = self.enemy_spawn_dict.get(str(self.frame))
         if enemies:
             for enemy in enemies:
@@ -115,7 +115,7 @@ class Level(State):
     def collision_check(self):
         self.bullet_hit_enemy_check()
         self.player_hit_item_check()
-        #self.enemy_hit_player_check()
+        # self.enemy_hit_player_check() #TODO TO REMOVE GODMODE
 
     def bullet_hit_enemy_check(self):
         for player in self.players:
@@ -304,11 +304,11 @@ class Level(State):
             if self.player_1_choose_time <= 0:
                 self.player_1 = Player(self, self.choice['1p'], PVector(150, 700))
                 self.player_1_choose = False
-                self.player_1_choose_time = 20 #Redundant since keyboard input also resets choose time
+                self.player_1_choose_time = 20  # Redundant since keyboard input also resets choose time
 
         if self.player_2_choose:
             self.player_2_choose_time -= 1
             if self.player_2_choose_time <= 0:
                 self.player_2 = Player(self, self.choice['2p'], PVector(450, 700))
                 self.player_2_choose = False
-                self.player_2_choose_time = 20 #Redundant since keyboard input also resets choose time
+                self.player_2_choose_time = 20  # Redundant since keyboard input also resets choose time

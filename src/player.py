@@ -8,7 +8,7 @@ import pygame
 from itertools import cycle
 
 from src.components.PVector import PVector
-from src.bullets.weapons import PlayerWeapon1, PlayerWeapon2
+from src.bullets.player_weapons import PlayerWeapon1, PlayerWeapon2
 from src.constants import GFX, SCREENRECT
 from src.components.tools import subsurfaces
 from typing import TYPE_CHECKING
