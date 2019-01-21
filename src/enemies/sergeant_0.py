@@ -34,11 +34,6 @@ class Sergeant0(Enemy):
         Exhaust(self, PVector(-15, -90), 1, True)
         Exhaust(self, PVector(15, -90), 1, True)
 
-    def move(self):
-        self.pos += self.direction
-        self.rect.center = tuple(self.pos)
-        self.hitbox.rect.center = tuple(self.pos)
-
     def check_shoot(self):
         # Need to lock its position before firing, otherwise it's too accurate
         if self.frame % 200 > 150:

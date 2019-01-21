@@ -23,6 +23,7 @@ class Enemy(pygame.sprite.Sprite):
         self.pos: PVector = pos  # It's a list, but still an iterable
         self.image: pygame.Surface = None
         self.rect: pygame.Rect = None
+        self.direction:PVector
         self.hitbox: pygame.sprite.Sprite = pygame.sprite.Sprite(game.enemy_hitboxes)
         self.hitbox.body = self  # When checking for sprite collision, pointer from hitbox to enemy object
         self.frame = 0
@@ -54,7 +55,9 @@ class Enemy(pygame.sprite.Sprite):
         self.custom_action()
 
     def move(self):
-        pass
+        self.pos+=self.direction
+        self.rect.center=tuple(self.pos)
+        self.hitbox.rect.center=tuple(self.pos)
 
     def update_img(self):
         pass

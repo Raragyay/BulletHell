@@ -35,12 +35,6 @@ class Corporal0(Enemy):
         self.hitbox.rect: pygame.Rect = self.hitbox.image.get_rect(center=tuple(self.pos))
         Exhaust(self, PVector(0, -90), 1, True)
 
-    def move(self):
-        # print("corporal moving")
-        self.pos += self.direction
-        # print(self.pos)
-        self.rect.center = tuple(self.pos)
-        self.hitbox.rect.center = tuple(self.pos)
 
     def check_shoot(self):  # Shoot a circle to try and "trap" the player
         if self.frame % 150 == 0:  # Shoot every 2.5 seconds

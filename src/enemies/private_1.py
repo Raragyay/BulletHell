@@ -31,14 +31,8 @@ class Private1(Enemy):
         self.hitbox.rect = self.hitbox.image.get_rect(center=tuple(self.pos))
         self.bullet_pos: PVector = None
 
-    def move(self):
-        # print("Moving")
-        self.pos += self.direction
-        self.rect.center = tuple(self.pos)
-        self.hitbox.rect.center = tuple(self.pos)
-        self.target = self.find_target_pos()
-
     def update_img(self):
+        self.target = self.find_target_pos()
         angle = self.pos.angle_to(self.target)  # radians
         self.bullet_pos = self.pos.project(angle, self.radius)
         rot_ang = degrees(angle) + 90
