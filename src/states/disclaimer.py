@@ -12,7 +12,7 @@ from src.components.transition import Transition
 class Disclaimer(State):
     def __init__(self):
         super().__init__()
-        self.next = 'LEVEL 1'  # TODO SWITCH TO OTHER STATE
+        self.next = 'SELECT'  # TODO SWITCH TO OTHER STATE
         self.bg = GFX['warning']
         self.timer = 300
         self.frame = 0
@@ -26,6 +26,7 @@ class Disclaimer(State):
         with open(CONTROLS, 'r') as file:
             persist["controls"] = json.load(file)
         persist['coins'] = 0
+        persist['choice']={'1p':0,'2p':0}
         return persist
 
     def event_process(self, events: List[pygame.event.Event]):

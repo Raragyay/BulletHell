@@ -17,6 +17,8 @@ class Transition:
     def fade_in(self):
         self.frame += 1
         if self.frame <= 51:  # 51*5=255, at that point no need to continue changing the mask
+            # This way, we can keep on calling transition fade-in in update loop which won't do anything if its
+            # already faded in.
             self.mask.fill((0, 0, 0, self.alpha_target - self.frame * 5))
 
     def fade_out(self):

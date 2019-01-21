@@ -17,11 +17,12 @@ from src.special_effects.bomb_effect import BombEffect
 from src.items.powerup import Powerup
 
 if TYPE_CHECKING:
+    from src.states.state import State
     from src.states.level import Level
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, game: Level, id: int, pos: PVector):
+    def __init__(self, game: State, id: int, pos: PVector):
         super().__init__(game.players)
 
         self.id: int = id
