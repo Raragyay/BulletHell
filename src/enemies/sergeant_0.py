@@ -29,7 +29,8 @@ class Sergeant0(Enemy):
         self.rect = self.image.get_rect(center=tuple(self.pos))
         self.hitbox.image = pygame.Surface((60, 60))
         self.hitbox.rect = self.hitbox.image.get_rect(center=tuple(self.pos))
-
+        self.weapon = SergeantWeapon0
+        self.target: PVector
         Exhaust(self, PVector(-15, -90), 1, True)
         Exhaust(self, PVector(15, -90), 1, True)
 
@@ -39,12 +40,15 @@ class Sergeant0(Enemy):
         self.hitbox.rect.center = tuple(self.pos)
 
     def check_shoot(self):
-        if self.frame % 200 > 150 and self.frame % 10 == 1:
-            target = self.find_target_pos()
-            left_pos = self.pos + PVector(-40, 55)
-            right_pos = self.pos + PVector(40, 55)
-            SergeantWeapon0(self, left_pos, target)
-            SergeantWeapon0(self, right_pos, target)
+        # Need to lock its position before firing, otherwise it's too accurate
+        if self.frame % 200 > 150:
+            if self.frame % 10 == 1:
+                left_pos = self.pos + PVector(-40, 55)
+                right_pos = self.pos + PVector(40, 55)
+                self.weapon(self, left_pos, self.target)
+                self.weapon(self, right_pos, self.target)
+        elif self.frame % 200 == 149:  # Lock right before firing
+            self.target = self.find_target_pos()
 
     def check_death(self):
         if self.health <= 0:
