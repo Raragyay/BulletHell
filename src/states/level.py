@@ -100,11 +100,20 @@ class Level(State):
         self.set_music()
         # TODO TEMP
 
+    def cleanup(self):
+        persist = {
+            'controls': self.controls,
+            'coins'   : self.coins,
+            'p1'      : self.player_1,
+            'p2'      : self.player_2
+        }
+        return persist
+
     def update(self):
         if self.frame == self.event_block_limit: self.event_block = False
         self.stage_transition.update()
         self.check_continue()
-        # TODO Check_continue
+
         if not self.show_continue:
             # Game frames should only continue when the players are playing,
             # otherwise, enemies will all spawn, and boss will spawn as well.
@@ -113,9 +122,10 @@ class Level(State):
             # This can be checked with self.players.
             if self.players:
                 self.frame += 1
+            #TODO check stage clear
             self.player_choose_update()
             self.background.update()
-            self.spawn_enemies()  # Spawn enemies will not spawn more
+            self.spawn_enemies()  # Spawn enemies will not spawn duplicates when frame is frozen since key is deleted.
             self.players.update()
             self.enemies.update()
             self.items.update()
