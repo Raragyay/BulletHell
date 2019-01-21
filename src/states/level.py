@@ -7,6 +7,7 @@ import pygame
 from src.bullets.player_laser_bullet import PlayerLaserBullet
 from src.components.PVector import PVector
 from src.components.hud import Hud
+from src.components.stage_transition import StageTransition
 from src.enemies.enemy import Enemy
 from src.player import Player
 from src.states.state import State
@@ -46,6 +47,7 @@ class Level(State):
         self.player_2_choose_time: int = 60 * 20
         self.choice = {'1p': 0, '2p': 0}
 
+        self.stage_transition = StageTransition(level_num)
         self.hud = Hud(self)
 
     def startup(self, persist: dict):
@@ -68,6 +70,7 @@ class Level(State):
 
     def update(self):
         self.frame += 1
+        self.stage_transition.update()
         self.player_choose_update()
         self.background.update()
         self.spawn_enemies()
@@ -90,6 +93,7 @@ class Level(State):
         self.special_effects.draw(surface)
         self.items.draw(surface)
         self.hud.draw(surface)
+        self.stage_transition.draw(surface)
 
     def set_music(self):
         if self.level_num == 1:
