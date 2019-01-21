@@ -29,9 +29,10 @@ class State:
         self.persist: dict = {}
         self.choice = {
             '1p': 0,
-            '2p': 0}
-        self.coins=0
-        self.frame=0
+            '2p': 0
+        }
+        self.coins = 0
+        self.frame = 0
 
     def startup(self, persist: dict):
         self.persist = persist
