@@ -16,7 +16,3 @@ class SergeantBullet(EnemyBullet):
         self.direction = PVector(0, 0).project(radians(self.angle), self.speed)
         self.image = pygame.transform.rotate(GFX['e_bt101'], self.angle - 90)
         self.rect = self.image.get_rect(center=tuple(self.pos))
-
-    def move(self):
-        self.pos += self.direction
-        self.rect.center = tuple(self.pos)

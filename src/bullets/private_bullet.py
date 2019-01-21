@@ -19,7 +19,3 @@ class PrivateBullet(EnemyBullet):
         self.direction = PVector(0, 0).project(angle, self.speed)
         self.image = pygame.transform.scale(GFX['ebt3'], (self.size, self.size))
         self.rect = self.image.get_rect(center=tuple(self.pos))
-
-    def move(self):
-        self.pos += self.direction
-        self.rect.center = tuple(self.pos)
