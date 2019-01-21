@@ -29,6 +29,11 @@ class Hud:
         self.player_1_label = Label('', {"topleft": (0, 25)}, self.labels, font_path=ARCADE_CLASSIC, font_size=25)
         self.player_2_label = Label('', {'topright': (WIDTH, 25)}, self.labels, font_path=ARCADE_CLASSIC, font_size=25)
 
+        self.continue_text_top = Label('', {"midbottom": (300, 300)}, self.labels, font_path=ARCADE_CLASSIC,
+                                       font_size=55)
+        self.continue_text_bottom = Label('', {"midtop": (300, 300)}, self.labels, font_path=ARCADE_CLASSIC,
+                                          font_size=55)
+
         self.player_1_life: pygame.Surface = None
         self.player_2_life: pygame.Surface = None
         self.bomb_img = GFX['bomb1']
@@ -45,7 +50,7 @@ class Hud:
         self.labels.draw(self.layer)
         self.draw_player_lives()
         self.draw_bomb_num()
-        surface.blit(self.layer,(0,0))
+        surface.blit(self.layer, (0, 0))
 
     def update_labels(self):
         p1 = self.game.player_1
@@ -64,7 +69,6 @@ class Hud:
                 p1_text = 'insert coin'
         self.player_1_label.update_text(p1_text)
 
-
         p2 = self.game.player_2
         if p2.alive():
             p2_text = f'{p2.score}'
@@ -80,6 +84,13 @@ class Hud:
             else:
                 p2_text = 'insert coin'
         self.player_2_label.update_text(p2_text)
+
+        if self.game.show_continue:
+            self.continue_text_top.update_text("continue")
+            self.continue_text_bottom.update_text(f"{ceil(self.game.continue_time/60)}")
+        else:
+            self.continue_text_top.update_text("")
+            self.continue_text_bottom.update_text("")
 
     def set_player_life_pictures(self):
         scale = lambda x: pygame.transform.scale(GFX[x], (20, 30))

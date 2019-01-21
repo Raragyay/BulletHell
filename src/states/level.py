@@ -40,7 +40,7 @@ class Level(State):
         self.level_num: int = level_num
         self.background: Background = Background(self.level_num)
 
-        self.enemy_spawn_dict: Dict = MAPS[f"map{level_num}"]
+        self.enemy_spawn_dict: dict = MAPS[f"map{level_num}"]
 
         # This is used if the player wants to join midway through the game, or if they die.
         self.player_1_choose: bool = False
@@ -48,6 +48,9 @@ class Level(State):
         self.player_2_choose: bool = False
         self.player_2_choose_time: int = 60 * 20
         self.choice = {'1p': 0, '2p': 0}
+
+        self.show_continue = False
+        self.continue_time = 10 * 60  # 10 seconds to continue
 
         self.stage_transition = StageTransition(level_num)
         self.hud = Hud(self)
@@ -71,23 +74,32 @@ class Level(State):
         self.player_2 = Player(self, 4, PVector(450, 700))
 
     def update(self):
-        self.frame += 1
         if self.frame == self.event_block_limit: self.event_block = False
         self.stage_transition.update()
-        self.player_choose_update()
-        self.background.update()
-        self.spawn_enemies()
-        self.players.update()
-        self.enemies.update()
-        self.items.update()
-        self.special_effects.update()
-        self.enemy_bullets.update()
-        self.hud.update()
-        self.collision_check()
+        self.check_continue()
+        # TODO Check_continue
+        if not self.show_continue:
+            # Game frames should only continue when the players are playing,
+            # otherwise, enemies will all spawn, and boss will spawn as well.
+            # One problem that could occur is that boss spawns when player is selecting ship, however. To remedy this,
+            # To remedy this, only advance frames if there is at least one player playing.
+            # This can be checked with self.players.
+            if self.players:
+                self.frame += 1
+            self.player_choose_update()
+            self.background.update()
+            self.spawn_enemies()  # Spawn enemies will not spawn more
+            self.players.update()
+            self.enemies.update()
+            self.items.update()
+            self.special_effects.update()
+            self.enemy_bullets.update()
+            self.collision_check()
+        else:
+            pass
+        self.hud.update()  # Always update hud to show remaining time.
 
     def draw(self, surface: pygame.Surface):
-
-        # surface.fill((0, 0, 0))  # TODO switch to background
         self.background.draw(surface)
         # This calls the draw function instead of just blitting image at rect position.
         [player.draw(surface) for player in self.players]
@@ -114,11 +126,15 @@ class Level(State):
     def spawn_enemies(self):
         if self.frame % 300 == 1:
             # enemy_dict[f'1'](self,PVector(randint(0,600),0))
-            enemy_dict[f'{6}'](self, PVector(randint(0, 600), 1000))
+            # enemy_dict[f'{6}'](self, PVector(randint(0, 600), 1000))
+            pass
         enemies = self.enemy_spawn_dict.get(str(self.frame))
         if enemies:
             for enemy in enemies:
                 enemy_dict[enemy](self, PVector.from_tuple(enemies[enemy]))
+            self.enemy_spawn_dict.pop(str(self.frame))
+
+            # This makes sure that the same enemy doesn't get spawned over and over again if the frame is frozen there.
 
     def collision_check(self):
         self.bullet_hit_enemy_check()
@@ -180,6 +196,33 @@ class Level(State):
                     player.hitbox, self.enemy_bullets, collided=pygame.sprite.collide_circle):
                 if not player.invincible:
                     player.explosion = True
+
+    def player_choose_update(self):
+        if self.player_1_choose:
+            self.player_1_choose_time -= 1
+            if self.player_1_choose_time <= 0:
+                self.player_1 = Player(self, self.choice['1p'], PVector(150, 700))
+                self.player_1_choose = False
+                self.player_1_choose_time = 20  # Redundant since keyboard input also resets choose time
+
+        if self.player_2_choose:
+            self.player_2_choose_time -= 1
+            if self.player_2_choose_time <= 0:
+                self.player_2 = Player(self, self.choice['2p'], PVector(450, 700))
+                self.player_2_choose = False
+                self.player_2_choose_time = 20  # Redundant since keyboard input also resets choose time
+
+    def check_continue(self):
+        if not self.players and self.player_1_choose == self.player_2_choose == False:
+            # If everyone's dead and no one is spawning
+            self.show_continue = True
+            self.continue_time -= 1
+            if self.continue_time <= 0:
+                self.done = True
+                self.next = 'GAME OVER'
+        else:
+            self.show_continue = False
+            self.continue_time = 10 * 60
 
     def event_process(self, events: List[pygame.event.Event]):
         if self.event_block: return  # Don't take input if we are in stage transition territory
@@ -309,18 +352,3 @@ class Level(State):
                     self.player_2.weapon_1 = False
                 else:
                     self.player_2.weapon_1 = True
-
-    def player_choose_update(self):
-        if self.player_1_choose:
-            self.player_1_choose_time -= 1
-            if self.player_1_choose_time <= 0:
-                self.player_1 = Player(self, self.choice['1p'], PVector(150, 700))
-                self.player_1_choose = False
-                self.player_1_choose_time = 20  # Redundant since keyboard input also resets choose time
-
-        if self.player_2_choose:
-            self.player_2_choose_time -= 1
-            if self.player_2_choose_time <= 0:
-                self.player_2 = Player(self, self.choice['2p'], PVector(450, 700))
-                self.player_2_choose = False
-                self.player_2_choose_time = 20  # Redundant since keyboard input also resets choose time
