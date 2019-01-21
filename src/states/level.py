@@ -4,6 +4,7 @@ from typing import List, Dict
 
 import pygame
 
+from src.bullets.player_laser_bullet import PlayerLaserBullet
 from src.components.PVector import PVector
 from src.components.hud import Hud
 from src.enemies.enemy import Enemy
@@ -126,10 +127,13 @@ class Level(State):
                 for enemy in enemies:
                     enemy.body.take_damage(bullet)
                 # Remove laser if it is past impact point
-                if player.weapon_2:
-                    for b in player.bullets:
-                        if b.pos.y < bullet.pos.y:
-                            b.kill()
+                if isinstance(bullet, PlayerLaserBullet):
+                    # This is because homing bullets can take longer to hit something,
+                    # and when they do, may cut off laser.
+                    if player.weapon_2:
+                        for b in player.bullets:
+                            if b.pos.y < bullet.pos.y:
+                                b.kill()
         # if self.player_1.alive():
         #     collide_dict = pygame.sprite.groupcollide(self.player_1.bullets, self.enemy_hitboxes, True, False)
         #     for bullet, enemies in collide_dict.items():
