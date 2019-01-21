@@ -2,7 +2,7 @@
 from src.bullets.sergeant_bullet import SergeantBullet
 
 
-class SergeantWeapon1:
+class SergeantWeapon0:
     def __init__(self, enemy, pos, target):
         SergeantBullet(-60, target, enemy.game, pos)
         SergeantBullet(-40, target, enemy.game, pos)

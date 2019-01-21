@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 
 import pygame
 
-from src.bullets.enemy_weapons import SergeantWeapon1
+from src.bullets.enemy_weapons import SergeantWeapon0
 from src.components.PVector import PVector
 from src.constants import GFX
 from src.enemies.enemy import Enemy
@@ -43,8 +43,8 @@ class Sergeant0(Enemy):
             target = self.find_target_pos()
             left_pos = self.pos + PVector(-40, 55)
             right_pos = self.pos + PVector(40, 55)
-            SergeantWeapon1(self, left_pos, target)
-            SergeantWeapon1(self, right_pos, target)
+            SergeantWeapon0(self, left_pos, target)
+            SergeantWeapon0(self, right_pos, target)
 
     def check_death(self):
         if self.health <= 0:
