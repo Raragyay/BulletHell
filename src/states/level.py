@@ -18,6 +18,7 @@ from src.special_effects.bullet_explosion import BulletExplosion
 
 
 class Level(State):
+    event_block_limit = 180
 
     def __init__(self, level_num: int):
         super().__init__()
@@ -34,6 +35,7 @@ class Level(State):
         self.items = pygame.sprite.Group()
 
         self.controls: Dict[str, int] = {}
+        self.event_block: bool = True  # No moving at the start
 
         self.level_num: int = level_num
         self.background: Background = Background(self.level_num)
@@ -70,6 +72,7 @@ class Level(State):
 
     def update(self):
         self.frame += 1
+        if self.frame == self.event_block_limit: self.event_block = False
         self.stage_transition.update()
         self.player_choose_update()
         self.background.update()
@@ -111,7 +114,7 @@ class Level(State):
     def spawn_enemies(self):
         if self.frame % 300 == 1:
             # enemy_dict[f'1'](self,PVector(randint(0,600),0))
-            enemy_dict[f'{5}'](self, PVector(randint(0, 600), 0))
+            enemy_dict[f'{6}'](self, PVector(randint(0, 600), 1000))
         enemies = self.enemy_spawn_dict.get(str(self.frame))
         if enemies:
             for enemy in enemies:
@@ -179,6 +182,7 @@ class Level(State):
                     player.explosion = True
 
     def event_process(self, events: List[pygame.event.Event]):
+        if self.event_block: return  # Don't take input if we are in stage transition territory
         keys = pygame.key.get_pressed()
 
         for event in events:
