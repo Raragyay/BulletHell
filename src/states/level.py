@@ -98,19 +98,19 @@ class Level(State):
             self.player_2 = pygame.sprite.Sprite()
 
         self.set_music()
-        # TODO TEMP
 
     def cleanup(self):
         persist = {
             'controls': self.controls,
             'coins'   : self.coins,
-            'p1'      : self.player_1,
-            'p2'      : self.player_2
+            'player_1': self.player_1,
+            'player_2': self.player_2
         }
         return persist
 
     def update(self):
-        if self.frame == self.event_block_limit: self.event_block = False
+        if self.frame == self.event_block_limit:
+            self.event_block = False
         self.stage_transition.update()
         self.check_continue()
 
@@ -122,7 +122,7 @@ class Level(State):
             # This can be checked with self.players.
             if self.players:
                 self.frame += 1
-            #TODO check stage clear
+            # TODO check stage clear
             self.player_choose_update()
             self.background.update()
             self.spawn_enemies()  # Spawn enemies will not spawn duplicates when frame is frozen since key is deleted.
@@ -262,7 +262,8 @@ class Level(State):
             self.continue_time = 10 * 60
 
     def event_process(self, events: List[pygame.event.Event]):
-        if self.event_block: return  # Don't take input if we are in stage transition territory
+        if self.event_block:
+            return  # Don't take input if we are in stage transition territory
         keys = pygame.key.get_pressed()
 
         for event in events:
