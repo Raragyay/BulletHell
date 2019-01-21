@@ -47,7 +47,9 @@ class Level(State):
         self.player_1_choose_time: int = 60 * 20  # 20 seconds to choose
         self.player_2_choose: bool = False
         self.player_2_choose_time: int = 60 * 20
-        self.choice = {'1p': 0, '2p': 0}
+        self.choice = {
+            '1p': 0,
+            '2p': 0}
 
         self.show_continue = False
         self.continue_time = 10 * 60  # 10 seconds to continue
@@ -67,11 +69,36 @@ class Level(State):
         self.controls = self.persist['controls']  # Guarantee will load
         self.coins = self.persist['coins']  # no need to do try except because player had to insert coins to start
 
+        # Player 1
+        if 'player_1' in self.persist:
+            self.player_1 = self.persist['player_1']
+            if self.player_1.alive():  # If it's not just a base sprite
+                # Reset position, hitbox and rect positions will be updated on next frame.
+                self.player_1.pos = PVector(150, 700)
+                self.player_1.game = self  # Make sure it's spawning bullets, etc in the right game.
+                self.players.add(self.player_1)
+        # If the player just instantiated a character from select screen
+        elif 'choice' in self.persist and self.persist['choice']['1p']:
+            self.player_1 = Player(self, self.choice['1p'], PVector(150, 700))
+        else:  # Just create a raw sprite for .alive() checking
+            self.player_1 = pygame.sprite.Sprite()
+
+        # Player 2
+        if 'player_2' in self.persist:
+            self.player_2 = self.persist['player_2']
+            if self.player_2.alive():  # If it's not just a base sprite
+                # Reset position, hitbox and rect positions will be updated on next frame.
+                self.player_2.pos = PVector(150, 700)
+                self.player_2.game = self  # Make sure it's spawning bullets, etc in the right game.
+                self.players.add(self.player_2)
+        # If the player just instantiated a character from select screen
+        elif 'choice' in self.persist and self.persist['choice']['2p']:
+            self.player_2 = Player(self, self.choice['2p'], PVector(450, 700))
+        else:  # Just create a raw sprite for .alive() checking
+            self.player_2 = pygame.sprite.Sprite()
+
         self.set_music()
         # TODO TEMP
-        self.player_1 = Player(self, 1, PVector(150, 700))
-
-        self.player_2 = Player(self, 4, PVector(450, 700))
 
     def update(self):
         if self.frame == self.event_block_limit: self.event_block = False

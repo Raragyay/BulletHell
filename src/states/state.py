@@ -29,10 +29,10 @@ class State:
         self.persist: dict = {}
         self.choice = {
             '1p': 0,
-            '2p': 0
-        }
+            '2p': 0}
         self.coins = 0
         self.frame = 0
+        self.players: pygame.sprite.Group  # To clear error checks with type hinting in Player class
 
     def startup(self, persist: dict):
         self.persist = persist

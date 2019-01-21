@@ -7,12 +7,14 @@ from src import constants
 from src.states.disclaimer import Disclaimer
 from src.states.level import Level
 from src.state_machine import StateMachine
+from src.states.select import Select
 
 
 def main():
     state_machine = StateMachine()
     states = {
         'DISCLAIMER': Disclaimer(),
+        'SELECT'    : Select(),
         'LEVEL 1'   : Level(1)
     }
     state_machine.init_states(states, 'DISCLAIMER')
