@@ -19,7 +19,7 @@ class StageTransition:
 
     def update(self):
         self.particles.update()
-        print(len(self.particles))
+        #print(len(self.particles))
 
     def draw(self, surface):
         self.particles.draw(surface)

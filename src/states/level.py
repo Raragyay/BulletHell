@@ -49,7 +49,8 @@ class Level(State):
         self.player_2_choose_time: int = 60 * 20
         self.choice = {
             '1p': 0,
-            '2p': 0}
+            '2p': 0
+        }
 
         self.show_continue = False
         self.continue_time = 10 * 60  # 10 seconds to continue
@@ -58,6 +59,7 @@ class Level(State):
         self.hud = Hud(self)
 
     def startup(self, persist: dict):
+        self.frame = 0
 
         self.players.empty()
         self.enemies.empty()
@@ -65,6 +67,13 @@ class Level(State):
         self.enemy_bullets.empty()
         self.special_effects.empty()
         self.items.empty()
+
+        self.done = False
+        self.show_continue = False
+        self.continue_time = 10 * 60
+        self.stage_transition = StageTransition(self.level_num)
+        self.event_block = True
+
         self.persist = persist
         self.controls = self.persist['controls']  # Guarantee will load
         self.coins = self.persist['coins']  # no need to do try except because player had to insert coins to start
@@ -160,9 +169,10 @@ class Level(State):
         # pygame.mixer.music.play(-1)
 
     def spawn_enemies(self):
-        if self.frame % 300 == 1:
-            enemy_dict[f'{randint(1,5)}'](self,PVector(randint(0,600),0))
-            # enemy_dict[f'{6}'](self, PVector(randint(0, 600), 1000))
+        if self.frame % 60 == 1:
+            enemy_dict[f'{randint(1,5)}'](self, PVector(randint(0, 600), 0))
+            if self.frame%600==1:
+                enemy_dict[f'{6}'](self, PVector(randint(0, 600), 1000))
             pass
         enemies = self.enemy_spawn_dict.get(str(self.frame))
         if enemies:
@@ -175,7 +185,7 @@ class Level(State):
     def collision_check(self):
         self.bullet_hit_enemy_check()
         self.player_hit_item_check()
-        #self.enemy_hit_player_check() #TODO TO REMOVE GODMODE
+        self.enemy_hit_player_check() #TODO TO REMOVE GODMODE
 
     def bullet_hit_enemy_check(self):
         for player in self.players:

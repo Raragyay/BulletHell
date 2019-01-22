@@ -8,12 +8,14 @@ from src.states.disclaimer import Disclaimer
 from src.states.level import Level
 from src.state_machine import StateMachine
 from src.states.select import Select
+from src.states.title import Title
 
 
 def main():
     state_machine = StateMachine()
     states = {
         'DISCLAIMER': Disclaimer(),
+        'TITLE'     : Title(),
         'SELECT'    : Select(),
         'LEVEL 1'   : Level(1)
     }

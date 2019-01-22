@@ -37,7 +37,7 @@ class Select(State):
         self.player_1_confirm = False
         self.player_2_confirm = False
         self.next = 'LEVEL 1'
-        self.time_left = 500
+        self.time_left = 20
 
         self.p1_ship_img: cycle = None  # Selecting between the two
         self.p2_ship_img: cycle = None
@@ -126,14 +126,32 @@ class Select(State):
         self.mask = g('player_select_gimp')
 
     def load_labels(self):
-        self.time_label = BlinkerLabel(str(self.time_left), {'midbottom': (300, 160)}, 30, self.labels, font_path=GAMER,
-                                       text_colour=(255, 255, 255), font_size=50)
-        self.coin_label = Label(f'credit {self.coins}', {'midbottom': (300, 780)}, self.labels,
-                                font_path=ARCADE_CLASSIC, text_colour=(255, 255, 255), font_size=30)
+        self.time_label = BlinkerLabel(str(self.time_left),
+                                       {'midbottom': (300, 160)},
+                                       30,
+                                       self.labels,
+                                       font_path=GAMER,
+                                       text_colour=(255, 255, 255),
+                                       font_size=50)
+        self.coin_label = Label(f'credit {self.coins}',
+                                {'midbottom': (300, 780)},
+                                self.labels,
+                                font_path=ARCADE_CLASSIC,
+                                text_colour=(255, 255, 255),
+                                font_size=30)
         # self.debug_label = Label(f'ABCDEFGHIJKLMNOPQRSTUVWXYZ', {'center': (300, 400)}, self.labels,
         #                         font_path=ANCIENT_MEDIUM, text_colour=(255, 255, 255), font_size=30)
 
     def startup(self, persist: dict):
+        self.players = pygame.sprite.Group()
+        self.player_1 = pygame.sprite.Sprite()
+        self.player_2 = pygame.sprite.Sprite()
+        self.player_1_confirm = False
+        self.player_2_confirm = False
+        self.transition = Transition()
+        self.done = False
+        self.time_left = 20
+
         # Reset p1_ship_images since they haven't indicated they want to play yet
         self.p1_ship_image: pygame.Surface = None
         self.p1_ship_rect: pygame.Rect = None
@@ -142,6 +160,10 @@ class Select(State):
 
         self.persist = persist
         self.choice = self.persist['choice']  # This denotes which player chose to start the game
+        if self.choice['1p']:
+            self.set_player_1()
+        if self.choice['2p']:
+            self.set_player_2()
         self.controls = self.persist['controls']
         self.coins = self.persist['coins']
         # Should always be done after controls initialized in "level" state where player actually starts giving input
@@ -156,8 +178,8 @@ class Select(State):
 
     def update(self):
         self.transition.fade_in()
-        self.fade_away = self.check_done()
-        if self.fade_away:
+        # self.fade_away = self.check_done()
+        if self.check_done():
             self.done = self.transition.fade_out()
         self.frame += 1
         self.update_time()

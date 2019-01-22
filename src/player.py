@@ -29,7 +29,7 @@ class Player(pygame.sprite.Sprite):
         self.speed: int = 5
         self.game: Level = game
         self.score = 0
-        self.lives = 3
+        self.lives = 10
 
         self.pos: PVector = pos
         self.direction: PVector = PVector(0, 0)
