@@ -13,7 +13,7 @@ class PlayerWeapon1:
     def __init__(self, player):
         p = player
         level = p.weapon_level
-        if level == 1:  # TODO Add more levels
+        if level == 1:
             PlayerBullet(p, 90, front_weapon, 1)
             PlayerBullet(p, 90, -front_weapon, 1)
         elif level == 2:

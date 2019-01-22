@@ -22,7 +22,6 @@ class Private0(Enemy):
 
         s = self.starting_pos
         v = self.target_pos
-        # TODO if s.x-v.x=0
         if not abs(s.x - v.x) <= self.vert_travel_threshold:
             self.a: float = float(s.y - v.y) / float(((s.x - v.x) ** 2))
 
@@ -34,7 +33,7 @@ class Private0(Enemy):
 
         self.hitbox.image = pygame.Surface((20, 20))
         self.hitbox.rect: pygame.Rect = self.hitbox.image.get_rect(
-                center=(self.pos.x, self.pos.y - 6))  # hit box is the "engine" part
+            center=(self.pos.x, self.pos.y - 6))  # hit box is the "engine" part
 
     def move(self):
         if self.starting_pos == self.target_pos:  # how could this happen to me
@@ -90,7 +89,9 @@ class Private0(Enemy):
             new_x = self.pos.x + copysign(delta_x, v.x - s.x)
             new_y = f(new_x)
 
-            # TODO Problem: when position.x is very close to vertex, slope of derivative is very small, approximation is very inaccurate.
+            # when position.x is very close to vertex, slope of derivative is very small,
+            # approximation is very inaccurate. Solution: hardcode to flip ship over vertex whenever it happens.
+
             # inverse_f = lambda y: sqrt(abs(y - v.y) / a) + v.x  # Doesn't work because it's not a function
             # """
             # Potential bug: When Vertex x is very close to current.x, delta x is extremely large.
@@ -100,9 +101,10 @@ class Private0(Enemy):
             # new_x = self.pos.x + copysign(
             #     max(min(abs(self.speed / (2 * a * dist_from_v)), self.speed),abs(1/a)),  # max(abs(self.pos.x -
             # v.x), 1 / a / 2),
-            #     v.x - s.x)  # TODO fix speed
+            #     v.x - s.x)
             # new_y = f(new_x)
-            self.log += f'Current:{self.pos}, Future:{PVector(new_x,new_y)}, Start:{s}, Vertex:{v}, a-value:{a},delta_x:{delta_x}\n'
+            self.log += f'Current:{self.pos}, Future:{PVector(new_x,new_y)}, Start:{s}, Vertex:{v}, a-value:{a},' \
+                        f'delta_x:{delta_x}\n'
             assert -50 <= new_x <= 650 and -50 <= new_y <= 850, f'{self.log}{new_x},{new_y}\n' \
                                                                 f'{new_x-v.x}\n' \
                                                                 f'{(new_x-v.x)**2}\n' \

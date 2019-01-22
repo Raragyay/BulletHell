@@ -276,14 +276,12 @@ class Level(State):
                     if not self.player_1.alive() and not self.player_1_choose and self.coins > 0:
                         self.coins -= 1
                         self.player_1_choose = True
-                        # TODO if all are dead and currently asking whether to continue or not, stop asking
                         self.choice['1p'] = 1
 
                 if event.key == self.controls['2p_start']:
                     if not self.player_2.alive() and not self.player_2_choose and self.coins > 0:
                         self.coins -= 1
                         self.player_2_choose = True
-                        # TODO see above
                         self.choice['2p'] = 2
 
                 if event.key in [self.controls[x] for x in ['1p_up', '1p_down', '1p_left', '1p_right']]:

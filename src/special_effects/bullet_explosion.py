@@ -5,7 +5,7 @@ from src.components.PVector import PVector
 from src.constants import GFX
 
 
-class BulletExplosion(pygame.sprite.Sprite):  # TODO All explosions have base class?
+class BulletExplosion(pygame.sprite.Sprite):
     def __init__(self, game, weapon_level, pos):
         super().__init__(game.special_effects)
         i = game.frame % 50 + 1  # between 1 and 50

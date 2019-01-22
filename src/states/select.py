@@ -104,7 +104,6 @@ class Select(State):
         self.p1_name_image = g('name_blank')
         self.p1_name_rect = pygame.Rect(115, 560, 70, 60)
 
-        # TODO P2
         self.p2_power_image = g('star_b_0')  # ????? picture
         self.p2_power_rect = pygame.Rect(402, 660, 97, 17)
         self.p2_speed_image = g('star_b_0')  # ????? picture
