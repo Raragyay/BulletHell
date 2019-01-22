@@ -208,7 +208,7 @@ class Player(pygame.sprite.Sprite):
             self.image = self.explosion_anim[self.explosion_frame // 2]
             self.rect = self.image.get_rect(center=tuple(self.pos))
         elif 20 <= self.explosion_frame < self.explosion_time:
-            self.image = GFX['name0']  # Transparent blank image
+            self.image = GFX['name_blank']  # Transparent blank image
         else:
             self.explosion_frame = 0
             self.lives -= 1

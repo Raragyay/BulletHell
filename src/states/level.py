@@ -161,7 +161,7 @@ class Level(State):
 
     def spawn_enemies(self):
         if self.frame % 300 == 1:
-            # enemy_dict[f'1'](self,PVector(randint(0,600),0))
+            enemy_dict[f'{randint(1,5)}'](self,PVector(randint(0,600),0))
             # enemy_dict[f'{6}'](self, PVector(randint(0, 600), 1000))
             pass
         enemies = self.enemy_spawn_dict.get(str(self.frame))
@@ -175,7 +175,7 @@ class Level(State):
     def collision_check(self):
         self.bullet_hit_enemy_check()
         self.player_hit_item_check()
-        # self.enemy_hit_player_check() #TODO TO REMOVE GODMODE
+        #self.enemy_hit_player_check() #TODO TO REMOVE GODMODE
 
     def bullet_hit_enemy_check(self):
         for player in self.players:

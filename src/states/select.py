@@ -1,15 +1,17 @@
 # coding=utf-8
 from itertools import cycle
-from math import ceil
 from typing import List, Dict
 
 import pygame
 
+from src import player
+from src.bullets.player_laser_bullet import PlayerLaserBullet
+from src.bullets.player_weapons import PlayerWeapon2, PlayerWeapon1
 from src.components.PVector import PVector
 from src.components.background import Background
 from src.components.label import BlinkerLabel, Label
 from src.components.transition import Transition
-from src.constants import GFX, WIDTH, SFX, GAMER, ARCADE_CLASSIC
+from src.constants import GFX, SFX, GAMER, ARCADE_CLASSIC, ANCIENT_MEDIUM
 from src.player import Player
 from src.states.state import State
 
@@ -30,11 +32,12 @@ class Select(State):
         self.players = pygame.sprite.Group()
 
         self.labels = pygame.sprite.Group()
+        self.enemy_hitboxes = pygame.sprite.Group()  # For showcase weapon
 
         self.player_1_confirm = False
         self.player_2_confirm = False
         self.next = 'LEVEL 1'
-        self.time_left = 20
+        self.time_left = 500
 
         self.p1_ship_img: cycle = None  # Selecting between the two
         self.p2_ship_img: cycle = None
@@ -127,6 +130,8 @@ class Select(State):
                                        text_colour=(255, 255, 255), font_size=50)
         self.coin_label = Label(f'credit {self.coins}', {'midbottom': (300, 780)}, self.labels,
                                 font_path=ARCADE_CLASSIC, text_colour=(255, 255, 255), font_size=30)
+        # self.debug_label = Label(f'ABCDEFGHIJKLMNOPQRSTUVWXYZ', {'center': (300, 400)}, self.labels,
+        #                         font_path=ANCIENT_MEDIUM, text_colour=(255, 255, 255), font_size=30)
 
     def startup(self, persist: dict):
         # Reset p1_ship_images since they haven't indicated they want to play yet
@@ -158,11 +163,13 @@ class Select(State):
         self.update_time()
         self.players.update()
         self.update_labels()
+        self.showcase_weapons()
         self.background.update()
 
     def draw(self, surface):
         self.background.draw(surface)
-        self.players.draw(surface)
+        [player.draw(surface) for player in self.players]  # See similar comment in Level file
+        # self.players.draw(surface)
         surface.blit(self.mask, (0, 0))
         if self.p1_ship_image:  # Image only gets initialized when player has indicated they want to play
             surface.blit(self.p1_ship_image, self.p1_ship_rect)
@@ -210,7 +217,7 @@ class Select(State):
     def update_labels(self):
         self.time_label.original_text = str(self.time_left)
         self.time_label.blink()
-        self.coin_label.original_text = f'credit {self.coins}'
+        self.coin_label.update_text(f'credit {self.coins}')
 
     def check_done(self):
         if self.time_left <= 0:
@@ -222,6 +229,21 @@ class Select(State):
         if self.player_1.alive() and self.player_2.alive() and self.player_1_confirm and self.player_2_confirm:
             return True
         return False
+
+    def showcase_weapons(self):
+        if self.frame % 120 >= 60:
+            if self.player_1.alive():
+                self.player_1.weapon_2 = True
+            if self.player_2.alive():
+                self.player_2.weapon_2 = True
+        else:
+            if self.frame % 10 == 1:  # Fire at 1,11,21,31,41,51
+                if self.player_1.alive():
+                    PlayerWeapon1(self.player_1)
+                    self.player_1.weapon_2 = False
+                if self.player_2.alive():
+                    PlayerWeapon1(self.player_2)
+                    self.player_2.weapon_2 = False
 
     def event_process(self, events: List[pygame.event.Event]):
         for event in events:

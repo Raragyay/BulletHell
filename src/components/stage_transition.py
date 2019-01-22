@@ -15,7 +15,7 @@ class StageTransition:
         for y in range(0, self.image.get_height(), 2):
             for x in range(0, self.image.get_width(), 2):
                 if self.image.get_at((x, y))[3] != 0:  # If there is non-transparent pixel at that location
-                    Particle(self, PVector(x+WIDTH//2-self.image.get_width()//2, y+200))
+                    Particle(self, PVector(x + WIDTH // 2 - self.image.get_width() // 2, y + 200))
 
     def update(self):
         self.particles.update()
@@ -47,7 +47,7 @@ class Particle(Sprite):
         elif self.frame > self.frames_to_group + self.group_time:
             self.pos -= self.speed
             self.check_oob()
-        self.rect.center=tuple(self.pos)
+        self.rect.center = tuple(self.pos)
 
     def check_oob(self):
         a = self.rect
