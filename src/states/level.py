@@ -68,7 +68,6 @@ class Level(State):
         self.persist = persist
         self.controls = self.persist['controls']  # Guarantee will load
         self.coins = self.persist['coins']  # no need to do try except because player had to insert coins to start
-
         # Player 1
         if 'player_1' in self.persist:
             self.player_1 = self.persist['player_1']
@@ -79,7 +78,7 @@ class Level(State):
                 self.players.add(self.player_1)
         # If the player just instantiated a character from select screen
         elif 'choice' in self.persist and self.persist['choice']['1p']:
-            self.player_1 = Player(self, self.choice['1p'], PVector(150, 700))
+            self.player_1 = Player(self, self.persist['choice']['1p'], PVector(150, 700))
         else:  # Just create a raw sprite for .alive() checking
             self.player_1 = pygame.sprite.Sprite()
 
@@ -93,7 +92,7 @@ class Level(State):
                 self.players.add(self.player_2)
         # If the player just instantiated a character from select screen
         elif 'choice' in self.persist and self.persist['choice']['2p']:
-            self.player_2 = Player(self, self.choice['2p'], PVector(450, 700))
+            self.player_2 = Player(self, self.persist['choice']['2p'], PVector(450, 700))
         else:  # Just create a raw sprite for .alive() checking
             self.player_2 = pygame.sprite.Sprite()
 
