@@ -100,19 +100,20 @@ class Select(State):
         # This means that centerx for name should also be 150.
         # So the left of name is 150-70/2=115
         # Similar logic for power and speed
+
         self.p1_power_image = g('star_r_0')  # ????? picture
-        self.p1_power_rect = pygame.Rect(102, 660, 97, 17)
+        self.p1_power_rect = pygame.Rect(102, 670, 97, 17)
         self.p1_speed_image = g('star_r_0')  # ????? picture
-        self.p1_speed_rect = pygame.Rect(102, 720, 97, 17)
+        self.p1_speed_rect = pygame.Rect(102, 730, 97, 17)
         self.p1_name_image = g('name_blank')
-        self.p1_name_rect = pygame.Rect(115, 560, 70, 60)
+        self.p1_name_rect = pygame.Rect(115, 580, 70, 60)
 
         self.p2_power_image = g('star_b_0')  # ????? picture
-        self.p2_power_rect = pygame.Rect(402, 660, 97, 17)
+        self.p2_power_rect = pygame.Rect(402, 670, 97, 17)
         self.p2_speed_image = g('star_b_0')  # ????? picture
-        self.p2_speed_rect = pygame.Rect(402, 720, 97, 17)
+        self.p2_speed_rect = pygame.Rect(402, 730, 97, 17)
         self.p2_name_image = g('name_blank')
-        self.p2_name_rect = pygame.Rect(415, 560, 70, 60)
+        self.p2_name_rect = pygame.Rect(415, 580, 70, 60)
 
         self.mask = g('player_select_gimp')
 
