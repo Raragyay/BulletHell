@@ -1,34 +1,35 @@
 # coding=utf-8
 from itertools import cycle
+from math import ceil
 from typing import List, Dict
 
 import pygame
 
 from src.components.PVector import PVector
 from src.components.background import Background
+from src.components.label import BlinkerLabel, Label
 from src.components.transition import Transition
-from src.constants import GFX, WIDTH, SFX
+from src.constants import GFX, WIDTH, SFX, GAMER, ARCADE_CLASSIC
 from src.player import Player
 from src.states.state import State
 
 
 class Select(State):
-    ship_img_start = 80
-    ship_img_vert = 500
-    spacing = 100
-
     showcase_weapon_level = 5
 
     def __init__(self):
         super().__init__()
         self.choice: Dict[str, int] = {
             '1p': 0,
-            '2p': 0}
+            '2p': 0
+        }
         self.controls: Dict[str, int] = {}
 
         self.player_1: Player = pygame.sprite.Sprite()
         self.player_2: Player = pygame.sprite.Sprite()
         self.players = pygame.sprite.Group()
+
+        self.labels = pygame.sprite.Group()
 
         self.player_1_confirm = False
         self.player_2_confirm = False
@@ -70,7 +71,11 @@ class Select(State):
         self.background = Background(3)
         self.transition = Transition()
 
+        self.time_label: BlinkerLabel = None
+        self.coin_label: Label = None
+
         self.load_images()
+        self.load_labels()
 
     def load_images(self):
         g = lambda key: GFX[key]
@@ -117,6 +122,12 @@ class Select(State):
 
         self.mask = g('player_select_gimp')
 
+    def load_labels(self):
+        self.time_label = BlinkerLabel(str(self.time_left), {'midbottom': (300, 160)}, 30, self.labels, font_path=GAMER,
+                                       text_colour=(255, 255, 255), font_size=50)
+        self.coin_label = Label(f'credit {self.coins}', {'midbottom': (300, 780)}, self.labels,
+                                font_path=ARCADE_CLASSIC, text_colour=(255, 255, 255), font_size=30)
+
     def startup(self, persist: dict):
         # Reset p1_ship_images since they haven't indicated they want to play yet
         self.p1_ship_image: pygame.Surface = None
@@ -146,6 +157,7 @@ class Select(State):
         self.frame += 1
         self.update_time()
         self.players.update()
+        self.update_labels()
         self.background.update()
 
     def draw(self, surface):
@@ -164,6 +176,7 @@ class Select(State):
         surface.blit(self.p2_speed_image, self.p2_speed_rect)
         surface.blit(self.p2_name_image, self.p2_name_rect)
 
+        self.labels.draw(surface)
         self.transition.draw(surface)
 
     def set_player_1(self):
@@ -193,6 +206,11 @@ class Select(State):
     def update_time(self):
         if self.frame % 60 == 0:
             self.time_left -= 1
+
+    def update_labels(self):
+        self.time_label.original_text = str(self.time_left)
+        self.time_label.blink()
+        self.coin_label.original_text = f'credit {self.coins}'
 
     def check_done(self):
         if self.time_left <= 0:
@@ -238,7 +256,7 @@ class Select(State):
                     if self.player_1.alive() and not self.player_1_confirm:
                         self.player_1_confirm = True
                         self.p1_ship_image = None  # Reset image, so that it is not drawn
-                        
+
                 if event.key in {self.controls['2p_button_a'], self.controls['2p_button_b']}:
                     if self.player_2.alive() and not self.player_2_confirm:
                         self.player_2_confirm = True

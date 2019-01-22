@@ -55,3 +55,19 @@ class Label(pygame.sprite.Sprite):
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
+
+
+class BlinkerLabel(Label):
+    def __init__(self, text: str, rect_attr: Dict, frequency, *groups, **settings):
+        super().__init__(text, rect_attr, *groups, **settings)
+        self.original_text = text
+        self.frequency = frequency
+        self.timer = 0
+        self.visible = True
+
+    def blink(self):
+        self.timer += 1
+        if self.timer > self.frequency:
+            self.timer -= self.frequency
+            self.visible = not self.visible
+            self.update_text(self.original_text if self.visible else "")
