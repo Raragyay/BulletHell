@@ -7,7 +7,7 @@ import pygame
 from src.components.PVector import PVector
 from src.components.background import Background
 from src.components.transition import Transition
-from src.constants import GFX, WIDTH
+from src.constants import GFX, WIDTH, SFX
 from src.player import Player
 from src.states.state import State
 
@@ -29,6 +29,9 @@ class Select(State):
         self.player_1: Player = pygame.sprite.Sprite()
         self.player_2: Player = pygame.sprite.Sprite()
         self.players = pygame.sprite.Group()
+
+        self.player_1_confirm = False
+        self.player_2_confirm = False
         self.next = 'LEVEL 1'
         self.time_left = 20
 
@@ -136,6 +139,9 @@ class Select(State):
 
     def update(self):
         self.transition.fade_in()
+        self.fade_away = self.check_done()
+        if self.fade_away:
+            self.done = self.transition.fade_out()
         self.frame += 1
         self.update_time()
         self.players.update()
@@ -183,15 +189,56 @@ class Select(State):
         next(self.p2_star_img)  # This is so that the power and speed images alternate 5,4 -> 4,5 -> 5,4
         self.p2_name_image = next(self.p2_name_img)
 
-    def event_process(self, events: List[pygame.event.Event]):
-        for event in events:
-            if event.type == pygame.KEYDOWN:
-                if event.key == self.controls['1p_start']:
-                    self.set_player_1()
-
-                if event.key == self.controls['2p_start']:
-                    self.set_player_2()
-
     def update_time(self):
         if self.frame % 60 == 0:
             self.time_left -= 1
+
+    def check_done(self):
+        if self.time_left <= 0:
+            return True
+        if not self.player_2.alive() and self.player_1_confirm:
+            return True
+        if not self.player_1.alive() and self.player_2_confirm:
+            return True
+        if self.player_1.alive() and self.player_2.alive() and self.player_1_confirm and self.player_2_confirm:
+            return True
+        return False
+
+    def event_process(self, events: List[pygame.event.Event]):
+        for event in events:
+            if event.type == pygame.KEYDOWN:
+                if event.key in {self.controls['1p_coin'], self.controls['2p_coin']}:
+                    SFX['coin'].play()
+                    self.coins += 1
+
+                if event.key == self.controls['1p_start']:
+                    if not self.player_1.alive() and self.coins >= 1:
+                        self.coins -= 1
+                        self.time_left = 20
+                        self.set_player_1()
+
+                if event.key == self.controls['2p_start']:
+                    if not self.player_2.alive() and self.coins >= 1:
+                        self.coins -= 1
+                        self.time_left = 20
+                        self.set_player_2()
+
+                if event.key in [self.controls[x] for x in {'1p_up', '1p_down', '1p_left', '1p_right'}]:
+                    if self.player_1.alive() and not self.player_1_confirm:
+                        self.set_player_1()
+                        SFX['hint'].play()
+
+                if event.key in [self.controls[x] for x in {'2p_up', '2p_down', '2p_left', '2p_right'}]:
+                    if self.player_2.alive() and not self.player_2_confirm:
+                        self.set_player_2()
+                        SFX['hint'].play()
+
+                if event.key in {self.controls['1p_button_a'], self.controls['1p_button_b']}:
+                    if self.player_1.alive() and not self.player_1_confirm:
+                        self.player_1_confirm = True
+                        self.p1_ship_image = None  # Reset image, so that it is not drawn
+                        
+                if event.key in {self.controls['2p_button_a'], self.controls['2p_button_b']}:
+                    if self.player_2.alive() and not self.player_2_confirm:
+                        self.player_2_confirm = True
+                        self.p2_ship_image = None  # Reset image, so that it is not drawn
