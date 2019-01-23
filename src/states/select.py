@@ -131,16 +131,14 @@ class Select(State):
                                        30,
                                        self.labels,
                                        font_path=GAMER,
-                                       text_colour=(255, 255, 255),
                                        font_size=50)
         self.coin_label = Label(f'credit {self.coins}',
                                 {'midbottom': (300, 780)},
                                 self.labels,
                                 font_path=ARCADE_CLASSIC,
-                                text_colour=(255, 255, 255),
                                 font_size=30)
         # self.debug_label = Label(f'ABCDEFGHIJKLMNOPQRSTUVWXYZ', {'center': (300, 400)}, self.labels,
-        #                         font_path=ANCIENT_MEDIUM, text_colour=(255, 255, 255), font_size=30)
+        #                         font_path=ANCIENT_MEDIUM, font_size=30)
 
     def startup(self, persist: dict):
         self.players = pygame.sprite.Group()

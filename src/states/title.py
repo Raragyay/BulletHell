@@ -68,14 +68,28 @@ class Title(State):
 
     def update_labels(self):
         self.coin_label.update_text(f'credit {self.coins}')
+        self.hint_label.original_text = f'Please insert coin: {pygame.key.name(self.controls["1p_coin"])} or {pygame.key.name(self.controls["2p_coin"])}' if not self.coins else f'Press 1p start button: {pygame.key.name(self.controls["1p_start"])} or 2p start button: {pygame.key.name(self.controls["2p_start"])}'
+        self.hint_label.blink()
 
     def make_labels(self):
         self.coin_label = Label(f'credit {self.coins}',
                                 {'midbottom': (300, 750)},
                                 self.labels,
                                 font_path=ARCADE_CLASSIC,
-                                text_colour=(255, 255, 255),
                                 font_size=25)
+        # 10 pixel spacing between each one
+        self.control_label = Label('Tab key for control settings',
+                                   {'midbottom': (300, 780)},
+                                   self.labels,
+                                   font_path=ARCADE_CLASSIC,
+                                   font_size=15)
+        # This one is kind of the "center" hint, telling them to press what they need to start.
+        self.hint_label = BlinkerLabel('',  # This will be updated in the next loop
+                                       {'midbottom': (300, 700)},
+                                       30,
+                                       self.labels,
+                                       font_path=ARCADE_CLASSIC,
+                                       font_size=30)
 
     def event_process(self, events: List[pygame.event.Event]):
         if self.event_block: return
