@@ -21,6 +21,7 @@ MAPS_FOLDER = os.path.join(RESOURCE_FOLDER, r'maps')
 SFX_FOLDER = os.path.join(RESOURCE_FOLDER, r'sound')
 FONTS_FOLDER = os.path.join(RESOURCE_FOLDER, r'fonts')
 CONTROLS = os.path.join(RESOURCE_FOLDER, 'controls.json')
+SCORE = os.path.join(RESOURCE_FOLDER, 'scoreboard.json')
 
 GFX = load_graphics(GRAPHICS_FOLDER)
 MUSIC = load_music(MUSIC_FOLDER)
@@ -29,6 +30,6 @@ SFX = load_sfx(SFX_FOLDER)
 FONTS = load_fonts(FONTS_FOLDER)
 
 ARCADE_CLASSIC = FONTS['ARCADECLASSIC']
-ANCIENT_MEDIUM=FONTS['Ancient Medium']
+ANCIENT_MEDIUM = FONTS['Ancient Medium']
 GAMER = FONTS['Gamer']
 LOADED_FONTS = {}

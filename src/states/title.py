@@ -66,7 +66,7 @@ class Title(State):
         # If we have waited for 5 seconds, not transitioning
         if self.screen_saver == 300 and not self.fade_away:
             self.fade_away = True
-            self.next = 'SCORE'
+            self.next = 'HIGHSCORE'
         if self.fade_away:
             self.done = self.transition.fade_out()
         elif self.transition.frame > 0:
