@@ -18,7 +18,7 @@ from src.special_effects.warning_cone import Cone
 
 
 class Boss1(Enemy):
-    health = 1
+    health = 3000
     speed = 0.5
 
     def __init__(self, game, pos):

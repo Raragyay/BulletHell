@@ -1,4 +1,5 @@
 # coding=utf-8
+# coding=utf-8
 from itertools import cycle
 from math import radians
 
@@ -7,7 +8,7 @@ from src.components.PVector import PVector
 from src.constants import GFX
 
 
-class BossBullet3(EnemyBullet):
+class CaptainBullet0(EnemyBullet):
     size = 15
     speed = 4
 

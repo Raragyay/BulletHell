@@ -43,9 +43,9 @@ class PlayerLaserBullet(Bullet):
 
     def calc_damage(self):
         if self.player.id in {1, 2}:
-            self.damage = 2 * (1 + self.player.weapon_level / 2.0)
+            self.damage = 1.5 * (1 + self.player.weapon_level / 3.0)
         else:
-            self.damage = 2 * (0.8 + self.player.weapon_level / 2.0)
+            self.damage = 1.5 * (0.8 + self.player.weapon_level / 3.0)
 
     def update(self):
         if not self.player.weapon_2:
