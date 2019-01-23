@@ -1,7 +1,6 @@
 # coding=utf-8
 import pygame
 
-from src.components.PVector import PVector
 from src.bullets.bullet import Bullet
 from src.constants import GFX
 

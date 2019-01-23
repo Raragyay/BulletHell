@@ -1,17 +1,15 @@
 # coding=utf-8
 from itertools import cycle
-from typing import List, Dict
+from typing import Dict, List
 
 import pygame
 
-from src import player
-from src.bullets.player_laser_bullet import PlayerLaserBullet
-from src.bullets.player_weapons import PlayerWeapon2, PlayerWeapon1
+from src.bullets.player_weapons import PlayerWeapon1
 from src.components.PVector import PVector
 from src.components.background import Background
 from src.components.label import BlinkerLabel, Label
 from src.components.transition import Transition
-from src.constants import GFX, SFX, GAMER, ARCADE_CLASSIC, ANCIENT_MEDIUM, MUSIC
+from src.constants import ARCADE_CLASSIC, GAMER, GFX, MUSIC, SFX
 from src.player import Player
 from src.states.state import State
 

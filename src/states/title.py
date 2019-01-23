@@ -13,7 +13,7 @@ from src.states.state import State
 class Title(State):
     def __init__(self):
         super().__init__()
-        self.background = GFX['title_screen']  # TODO make custom background
+        self.background = GFX['title_screen']
         self.coins = 0
         self.fade_away = False
         self.event_block = False

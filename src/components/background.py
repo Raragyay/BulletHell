@@ -61,7 +61,7 @@ class Star(pygame.sprite.Sprite):
             pygame.draw.circle(self.image, (255, 255, 255, 200), (2, 2), 2)  # big more transparent circle
         self.rect = self.image.get_rect(center=(x_pos, y_pos))
 
-    def update(self, *args):
+    def update(self):
         self.rect.y += self.speed
         if self.rect.y > HEIGHT:
             self.kill()

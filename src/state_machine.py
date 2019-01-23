@@ -18,7 +18,6 @@ class StateMachine:
     def init_states(self, state_dict: Dict[str, State], start_state: str):
         self.state_dict = state_dict
         self.state = self.state_dict[start_state]
-        # TODO TEMP
         self.state.startup({})
 
     def check_quit(self, events: List[pygame.event.Event]):

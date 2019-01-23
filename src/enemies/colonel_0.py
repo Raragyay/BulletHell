@@ -1,15 +1,10 @@
 # coding=utf-8
 from itertools import cycle
-
-from src.bullets.enemy_weapons import ColonelWeapon1
-from src.components.PVector import PVector
-from src.enemies.enemy import Enemy
-
 from random import randint
 
 import pygame
 
-from src.bullets.first_lieutenant_bullet import FirstLieutenantBullet
+from src.bullets.enemy_weapons import ColonelWeapon1
 from src.components.PVector import PVector
 from src.constants import GFX, WIDTH
 from src.enemies.enemy import Enemy

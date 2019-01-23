@@ -1,19 +1,15 @@
 # coding=utf-8
 # coding=utf-8
 from itertools import cycle
-from random import randint
 
 import pygame
 
 from src.bullets.captain_bullet_0 import CaptainBullet0
-from src.bullets.first_lieutenant_bullet import FirstLieutenantBullet
 from src.components.PVector import PVector
 from src.constants import GFX
 from src.enemies.enemy import Enemy
 from src.items.bomb import Bomb
-from src.items.coin import Coin
 from src.special_effects.enemy_explosion import EnemyExplosion
-from src.special_effects.exhaust import Exhaust
 
 
 class Captain0(Enemy):  # Shoots a sprial of bullets

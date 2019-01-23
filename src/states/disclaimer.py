@@ -12,7 +12,7 @@ from src.components.transition import Transition
 class Disclaimer(State):
     def __init__(self):
         super().__init__()
-        self.next = 'TITLE'  # TODO SWITCH TO OTHER STATE
+        self.next = 'TITLE'
         self.bg = GFX['warning']
         self.timer = 300
         self.frame = 0

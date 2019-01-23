@@ -198,7 +198,7 @@ class Level(State):
     def collision_check(self):
         self.bullet_hit_enemy_check()
         self.player_hit_item_check()
-        # self.enemy_hit_player_check() #TODO TO REMOVE GODMODE
+        self.enemy_hit_player_check() #TODO TO REMOVE GODMODE
 
     def bullet_hit_enemy_check(self):
         for player in self.players:

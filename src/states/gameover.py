@@ -4,7 +4,6 @@ from typing import List
 
 import pygame
 
-from src.components.background import Background
 from src.components.stage_transition import StageTransition
 from src.constants import SCORE
 from src.states.state import State

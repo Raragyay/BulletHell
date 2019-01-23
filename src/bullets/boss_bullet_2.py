@@ -1,6 +1,5 @@
 # coding=utf-8
 from math import radians
-from random import randint
 
 import pygame
 
