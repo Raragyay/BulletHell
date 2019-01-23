@@ -33,6 +33,7 @@ class State:
         self.coins = 0
         self.frame = 0
         self.players: pygame.sprite.Group  # To clear error checks with type hinting in Player class
+        self.controls: dict = None
 
     def startup(self, persist: dict):
         self.persist = persist

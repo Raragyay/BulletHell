@@ -12,6 +12,7 @@ class Label(pygame.sprite.Sprite):
         "font_path"  : None,
         "font_size"  : 12,
         "text_colour": (255, 255, 255),
+        'fill_colour': None,
         "alpha"      : 255
 
     }  # To add to as new come up
@@ -19,6 +20,7 @@ class Label(pygame.sprite.Sprite):
     def __init__(self, text: str, rect_attr: Dict, *groups, **settings):
         super().__init__(*groups)
         self.text_colour: tuple = None
+        self.fill_colour: tuple = None
         self.alpha: int = None
         self.font_size: int = None
         self.font_path: str = None
@@ -49,7 +51,7 @@ class Label(pygame.sprite.Sprite):
             setattr(self, setting, default_copy[setting])
 
     def update_img(self):
-        render_args = (self.text, True, self.text_colour)
+        render_args = (self.text, True, self.text_colour, self.fill_colour)
         self.image: pygame.Surface = self.font.render(*render_args)  # Unpack tuple as arguments
         self.rect = self.image.get_rect(**self.rect_attr)
 

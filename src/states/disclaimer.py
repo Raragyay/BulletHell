@@ -22,18 +22,12 @@ class Disclaimer(State):
         self.persist = persist
 
     def cleanup(self):
-        persist={}
-        with open(CONTROLS, 'r') as file:
-            persist["controls"] = json.load(file)
-        persist['coins'] = 0
-        persist['choice']={'1p':0,'2p':0}
-        return persist
+        return {}
 
     def event_process(self, events: List[pygame.event.Event]):
         pass
 
     def update(self):
-        self.done = True  # TODO REMOPVE
         self.transition.fade_in()
         self.frame += 1
         if self.frame > 150:  # After fade in for sure

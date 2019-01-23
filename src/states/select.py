@@ -11,7 +11,7 @@ from src.components.PVector import PVector
 from src.components.background import Background
 from src.components.label import BlinkerLabel, Label
 from src.components.transition import Transition
-from src.constants import GFX, SFX, GAMER, ARCADE_CLASSIC, ANCIENT_MEDIUM
+from src.constants import GFX, SFX, GAMER, ARCADE_CLASSIC, ANCIENT_MEDIUM, MUSIC
 from src.player import Player
 from src.states.state import State
 
@@ -127,13 +127,15 @@ class Select(State):
 
     def load_labels(self):
         self.time_label = BlinkerLabel(str(self.time_left),
-                                       {'midbottom': (300, 160)},
+                                       {
+                                           'midbottom': (300, 160)},
                                        30,
                                        self.labels,
                                        font_path=GAMER,
                                        font_size=50)
         self.coin_label = Label(f'credit {self.coins}',
-                                {'midbottom': (300, 780)},
+                                {
+                                    'midbottom': (300, 780)},
                                 self.labels,
                                 font_path=ARCADE_CLASSIC,
                                 font_size=30)
@@ -166,7 +168,11 @@ class Select(State):
         self.coins = self.persist['coins']
         # Should always be done after controls initialized in "level" state where player actually starts giving input
 
+        pygame.mixer.music.load(MUSIC['07_-_stars_dont_twinkle_0'])
+        pygame.mixer.music.play(-1)
+
     def cleanup(self):
+        pygame.mixer.music.fadeout(500)
         persist = {
             'coins'   : self.coins,
             'controls': self.controls,

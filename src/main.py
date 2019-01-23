@@ -4,6 +4,7 @@ import sys
 import pygame
 
 from src import constants
+from src.states.control import Control
 from src.states.disclaimer import Disclaimer
 from src.states.level import Level
 from src.state_machine import StateMachine
@@ -16,6 +17,7 @@ def main():
     states = {
         'DISCLAIMER': Disclaimer(),
         'TITLE'     : Title(),
+        'CONTROL'   : Control(),
         'SELECT'    : Select(),
         'LEVEL 1'   : Level(1)
     }
