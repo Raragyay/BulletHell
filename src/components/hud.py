@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 import pygame
 
 from src.components.label import Label
-from src.constants import WIDTH, HEIGHT, ARCADE_CLASSIC, GFX
+from src.constants import WIDTH, HEIGHT, ARCADE_CLASSIC, GFX, GAMER
 
 if TYPE_CHECKING:
     from src.states.level import Level
@@ -24,19 +24,26 @@ class Hud:
         rect_vals = [(0, 0), (WIDTH // 2, 0), (WIDTH, 0)]
         text_colours = [(199, 42, 224), (255, 10, 10), (7, 7, 240)]
         for text, attr, pos, col in zip(texts, rect_attributes, rect_vals, text_colours):
-            Label(text, {attr: pos}, self.labels, font_path=ARCADE_CLASSIC, text_colour=col, font_size=25)
+            Label(text, {
+                attr: pos}, self.labels, font_path=ARCADE_CLASSIC, text_colour=col, font_size=25)
 
-        self.player_1_label = Label('', {"topleft": (0, 25)}, self.labels, font_path=ARCADE_CLASSIC, font_size=25)
-        self.player_2_label = Label('', {'topright': (WIDTH, 25)}, self.labels, font_path=ARCADE_CLASSIC, font_size=25)
+        self.player_1_label = Label('', {
+            "topleft": (0, 25)}, self.labels, font_path=ARCADE_CLASSIC, font_size=25)
+        self.player_2_label = Label('', {
+            'topright': (WIDTH, 25)}, self.labels, font_path=ARCADE_CLASSIC, font_size=25)
 
-        self.continue_text_top = Label('', {"midbottom": (300, 300)}, self.labels, font_path=ARCADE_CLASSIC,
+        self.continue_text_top = Label('', {
+            "midbottom": (300, 300)}, self.labels, font_path=ARCADE_CLASSIC,
                                        font_size=55)
-        self.continue_text_bottom = Label('', {"midtop": (300, 300)}, self.labels, font_path=ARCADE_CLASSIC,
+        self.continue_text_bottom = Label('', {
+            "midtop": (300, 300)}, self.labels, font_path=ARCADE_CLASSIC,
                                           font_size=55)
 
         self.player_1_life: pygame.Surface = None
         self.player_2_life: pygame.Surface = None
         self.bomb_img = GFX['bomb1']
+
+        self.health_bar = GFX['health_bar']
 
         # Shouldn't assign player 1 and player 2 because it could be created by game,
         # changing the pointer in game but not in hud
@@ -50,6 +57,8 @@ class Hud:
         self.labels.draw(self.layer)
         self.draw_player_lives()
         self.draw_bomb_num()
+        self.draw_health_bar()
+        self.blit_bonus()
         surface.blit(self.layer, (0, 0))
 
     def update_labels(self):
@@ -116,3 +125,58 @@ class Hud:
         if self.game.player_2.alive():
             for i in range(self.game.player_2.bomb_num):
                 self.layer.blit(self.bomb_img, (WIDTH - 30 - i * 30, HEIGHT - 30))
+
+    def draw_health_bar(self):
+        if self.game.boss.alive():
+            health_bar_layer = pygame.Surface(self.health_bar.get_size(), pygame.SRCALPHA)
+            length = self.game.boss.health_percent * self.health_bar.get_width()
+            if self.game.boss.health_percent > 0.2:
+                pygame.draw.rect(health_bar_layer, (250, 211, 42), (0, 0, length, self.health_bar.get_height()))
+            else:
+                pygame.draw.rect(health_bar_layer, (255, 0, 0), (0, 0, length, self.health_bar.get_height()))
+            health_bar_layer.blit(self.health_bar, (0, 0))
+            self.layer.blit(health_bar_layer, self.health_bar.get_rect(center=(300, 55)))
+
+    def blit_bonus(self):
+        if self.game.stage_clear:
+            self.layer.blit(GFX['stageclear'], (220, 100))
+
+            if self.game.player_1.alive():
+                layer = pygame.Surface((200, 400), pygame.SRCALPHA)
+                layer.blit(GFX['frame1'], (0, 0))  # Border
+                p1_bonus_labels = pygame.sprite.Group()
+                colour = (199, 42, 224)
+                texts = ['Player 1', f'{self.game.player_1.lives}', f'{self.game.bonus_num*self.game.player_1.lives}',
+                         f'{self.game.player_1.bomb_num}', f'{self.game.bonus_num*self.game.player_1.bomb_num}',
+                         'BONUS', f'{self.game.bonus_num*(self.game.player_1.bomb_num+self.game.player_1.lives)}']
+                locs = ['center', 'topright', 'topright', 'topright', 'topright', 'center', 'center']
+                coords = [(100, 50), (160, 100), (180, 150), (160, 200), (180, 250), (100, 310), (100, 350)]
+                fonts = [ARCADE_CLASSIC, ARCADE_CLASSIC, GAMER, ARCADE_CLASSIC, GAMER, ARCADE_CLASSIC, GAMER]
+                sizes = [35, 35, 35, 35, 35, 35, 49]
+                for t, l, c, f, s in zip(texts, locs, coords, fonts, sizes):
+                    Label(t, {
+                        l: c}, p1_bonus_labels, font_path=f, colour=colour, font_size=s)
+                p1_bonus_labels.draw(layer)
+                layer.blit(self.player_1_life, (50, 105))
+                layer.blit(self.bomb_img, (48, 205))
+                self.layer.blit(layer, (50, 200))  # Center x is at 150.
+
+            if self.game.player_2.alive():
+                layer = pygame.Surface((200, 400), pygame.SRCALPHA)
+                layer.blit(GFX['frame2'], (0, 0))  # Border
+                p2_bonus_labels = pygame.sprite.Group()
+                colour = (7, 7, 240)
+                texts = ['Player 1', f'{self.game.player_2.lives}', f'{self.game.bonus_num*self.game.player_2.lives}',
+                         f'{self.game.player_2.bomb_num}', f'{self.game.bonus_num*self.game.player_2.bomb_num}',
+                         'BONUS', f'{self.game.bonus_num*(self.game.player_2.bomb_num+self.game.player_2.lives)}']
+                locs = ['center', 'topright', 'topright', 'topright', 'topright', 'center', 'center']
+                coords = [(100, 50), (160, 100), (180, 150), (160, 200), (180, 250), (100, 310), (100, 350)]
+                fonts = [ARCADE_CLASSIC, ARCADE_CLASSIC, GAMER, ARCADE_CLASSIC, GAMER, ARCADE_CLASSIC, GAMER]
+                sizes = [35, 35, 35, 35, 35, 35, 49]
+                for t, l, c, f, s in zip(texts, locs, coords, fonts, sizes):
+                    Label(t, {
+                        l: c}, p2_bonus_labels, font_path=f, colour=colour, font_size=s)
+                p2_bonus_labels.draw(layer)
+                layer.blit(self.player_2_life, (50, 105))
+                layer.blit(self.bomb_img, (48, 205))
+                self.layer.blit(layer, (350, 200))  # Center x is at 150.

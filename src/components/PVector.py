@@ -49,19 +49,19 @@ class PVector:
     def __int__(self):
         return PVector(int(self.x), int(self.y))
 
-    def __mul__(self, scalar: int) -> 'PVector':
+    def __mul__(self, scalar: float) -> 'PVector':
         return PVector(self.x * scalar, self.y * scalar)
 
-    def __rmul__(self, scalar: int) -> 'PVector':
+    def __rmul__(self, scalar: float) -> 'PVector':
         return PVector(self.x * scalar, self.y * scalar)
 
-    def __truediv__(self, scalar: int) -> 'PVector':
+    def __truediv__(self, scalar: float) -> 'PVector':
         return PVector(self.x / scalar, self.y / scalar)
 
-    def __floordiv__(self, scalar: int) -> 'PVector':
+    def __floordiv__(self, scalar: float) -> 'PVector':
         return PVector(self.x // scalar, self.y // scalar)
 
-    def __mod__(self, scalar: int) -> 'PVector':
+    def __mod__(self, scalar: float) -> 'PVector':
         return PVector(self.x % scalar, self.y % scalar)
 
     def __ceil__(self) -> 'PVector':

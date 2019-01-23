@@ -19,6 +19,9 @@ from src.special_effects.bullet_explosion import BulletExplosion
 
 class Level(State):
     event_block_limit = 180
+    bonus_num = 100000
+    show_label_time = 300
+    amount_of_levels = 1
 
     def __init__(self, level_num: int):
         super().__init__()
@@ -55,6 +58,9 @@ class Level(State):
         self.show_continue = False
         self.continue_time = 10 * 60  # 10 seconds to continue
 
+        self.stage_clear = False
+        self.show_label_timer = 0
+
         self.stage_transition = StageTransition(level_num)
         self.hud = Hud(self)
 
@@ -68,11 +74,15 @@ class Level(State):
         self.special_effects.empty()
         self.items.empty()
 
+        self.boss = pygame.sprite.Sprite()
+
         self.done = False
         self.show_continue = False
         self.continue_time = 10 * 60
         self.stage_transition = StageTransition(self.level_num)
         self.event_block = True
+        self.stage_clear = False
+        self.show_label_timer = 0
 
         self.persist = persist
         self.controls = self.persist['controls']  # Guarantee will load
@@ -128,6 +138,8 @@ class Level(State):
             # One problem that could occur is that boss spawns when player is selecting ship, however. To remedy this,
             # To remedy this, only advance frames if there is at least one player playing.
             # This can be checked with self.players.
+            if self.stage_clear:
+                self.stage_clear_effect()
             if self.players:
                 self.frame += 1
             # TODO check stage clear
@@ -170,13 +182,16 @@ class Level(State):
 
     def spawn_enemies(self):
         if self.frame % 60 == 1:
-            #enemy_dict[f'{randint(1,5)}'](self, PVector(randint(0, 600), 0))
-            #enemy_dict[f'{7}'](self, PVector(randint(0, 600), 1000))
+            # enemy_dict[f'{randint(1,5)}'](self, PVector(randint(0, 600), 0))
+            # enemy_dict[f'{7}'](self, PVector(randint(0, 600), 1000))
             pass
         enemies = self.enemy_spawn_dict.get(str(self.frame))
         if enemies:
             for enemy in enemies:
-                enemy_dict[enemy](self, PVector.from_tuple(enemies[enemy]))
+                new_enemy = enemy_dict[enemy](self, PVector.from_tuple(enemies[enemy]))
+                if 'Boss' in new_enemy.__class__.__name__:
+                    self.boss = new_enemy
+
             self.enemy_spawn_dict.pop(str(self.frame))
 
             # This makes sure that the same enemy doesn't get spawned over and over again if the frame is frozen there.
@@ -184,7 +199,7 @@ class Level(State):
     def collision_check(self):
         self.bullet_hit_enemy_check()
         self.player_hit_item_check()
-        self.enemy_hit_player_check() #TODO TO REMOVE GODMODE
+        # self.enemy_hit_player_check() #TODO TO REMOVE GODMODE
 
     def bullet_hit_enemy_check(self):
         for player in self.players:
@@ -268,6 +283,41 @@ class Level(State):
         else:
             self.show_continue = False
             self.continue_time = 10 * 60
+
+    def stage_clear_effect(self):
+        if self.player_1_choose:
+            self.player_1 = Player(self, self.choice['1p'], PVector(150, 700))
+            self.player_1_choose = False
+            self.player_1_choose_time = 20 * 60
+
+        if self.player_2_choose:
+            self.player_2 = Player(self, self.choice['2p'], PVector(450, 700))
+            self.player_2_choose = False
+            self.player_2_choose_time = 20 * 60
+        pygame.mixer.music.fadeout(500)
+        if self.player_1.alive():
+            self.player_1.pos = PVector(150, 700)
+            self.player_1.rect.center = tuple(self.player_1.pos)
+            self.player_1.hitbox.rect.center = tuple(self.player_1.pos)
+            self.player_1.direction = PVector(0, 0)
+            self.player_1.bullets.empty()
+            bonus = self.bonus_num * (self.player_1.lives + self.player_1.bomb_num)
+            self.player_1.score += int(bonus / self.show_label_time)
+
+        if self.player_2.alive():
+            self.player_2.pos = PVector(450, 700)
+            self.player_2.rect.center = tuple(self.player_2.pos)
+            self.player_2.hitbox.rect.center = tuple(self.player_2.pos)
+            self.player_2.direction = PVector(0, 0)
+            self.player_2.bullets.empty()
+            bonus = self.bonus_num * (self.player_2.lives + self.player_2.bomb_num)
+            self.player_2.score += int(bonus / self.show_label_time)
+
+        self.show_label_timer += 1
+        self.event_block = True
+        if self.show_label_timer >= self.show_label_time + 1:
+            self.done = True
+            self.next = f'LEVEL{self.level_num+1}' if self.level_num < self.amount_of_levels else 'GAME OVER'
 
     def event_process(self, events: List[pygame.event.Event]):
         if self.event_block:

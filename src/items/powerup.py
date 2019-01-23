@@ -11,7 +11,6 @@ from src.items.item import Item
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from src.player import Player
     from src.states.level import Level
 
 
@@ -51,7 +50,7 @@ class Powerup(Item):
         else:
             super().check_oob()
 
-    def apply_effect(self, player: Player):
+    def apply_effect(self, player):
         # print(f"collected at {self.pos}")
         SFX['powerup'].play()
         if player.weapon_level <= 7:

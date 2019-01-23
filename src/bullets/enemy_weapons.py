@@ -1,4 +1,5 @@
 # coding=utf-8
+from src.bullets.boss_bullet_2 import BossBullet2
 from src.bullets.second_lieutenant_bullet import SecondLieutenantBullet
 from src.bullets.sergeant_bullet import SergeantBullet
 from src.components.PVector import PVector
@@ -34,9 +35,21 @@ class SecondLieutenantWeapon0:
 
 
 class SecondLieutenantWeapon1:
-    firing_angles = (0, 72, 72*2, 72*3, 72*4)  # Kind of like a rotating star
+    firing_angles = (0, 72, 72 * 2, 72 * 3, 72 * 4)  # Kind of like a rotating star
 
     def __init__(self, enemy, pos):
         for i in range(5):
             SecondLieutenantBullet(enemy.game, pos + PVector(0, enemy.firing_positions[i]),
                                    enemy.frame + self.firing_angles[i], 15)
+
+
+class Boss1Pattern1:
+    def __init__(self, enemy, pos):
+        for i in range(0, 360, 20):
+            BossBullet2(enemy.game, pos, i)
+
+
+class Boss1Pattern2:
+    def __init__(self, enemy, pos):  # Back and forth in all directions
+        BossBullet2(enemy.game, pos, enemy.frame * 8)
+        BossBullet2(enemy.game, pos, -enemy.frame * 8)
