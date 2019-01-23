@@ -4,9 +4,9 @@ from typing import List
 
 import pygame
 
-from src.components.label import BlinkerLabel
+from src.components.label import BlinkerLabel, Label
 from src.components.transition import Transition
-from src.constants import GFX, ARCADE_CLASSIC, CONTROLS
+from src.constants import GFX, ARCADE_CLASSIC, CONTROLS, GAMER
 from src.states.state import State
 
 
@@ -20,6 +20,13 @@ class Control(State):
 
         self.labels = pygame.sprite.Group()
         self.label_list: List[BlinkerLabel] = []
+        self.hints = ['Arrow Keys To Navigate / Enter To Unlock',
+                      'Assign Your Own Key / Enter To Confirm']
+
+        self.hint_1 = Label('Esc to return', {
+            'center': (300, 750)}, self.labels, font_path=GAMER, font_size=25)
+        self.hint_2 = Label(self.hints[0], {
+            'center': (300, 780)}, self.labels, font_path=GAMER, font_size=25)
 
         self.changing_label = False
         self.chosen_control = 0
@@ -52,8 +59,13 @@ class Control(State):
             self.label_list.append(BlinkerLabel(pygame.key.name(self.controls[name]), {
                 'center': center}, 30, self.labels, font_path=ARCADE_CLASSIC, font_size=25))
 
+        self.hint_1 = Label('Esc to return', {
+            'center': (300, 750)}, self.labels, font_path=GAMER, font_size=25)
+        self.hint_2 = Label(self.hints[0], {
+            'center': (300, 780)}, self.labels, font_path=GAMER, font_size=25)
+
     def update(self):
-        print(self.chosen_control)
+        #print(self.chosen_control)
         self.transition.fade_in()
         self.update_labels()
         if self.fade_away:
@@ -79,6 +91,7 @@ class Control(State):
                 label.fill_colour = None
                 label.text_colour = (255, 255, 255)
             label.update_img()
+        self.hint_2.update_text(self.hints[self.changing_label])
 
     def update_control(self, key):
         selected_label = self.label_list[self.chosen_control]
