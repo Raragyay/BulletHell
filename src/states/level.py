@@ -170,9 +170,8 @@ class Level(State):
 
     def spawn_enemies(self):
         if self.frame % 60 == 1:
-            enemy_dict[f'{randint(1,5)}'](self, PVector(randint(0, 600), 0))
-            if self.frame%600==1:
-                enemy_dict[f'{6}'](self, PVector(randint(0, 600), 1000))
+            #enemy_dict[f'{randint(1,5)}'](self, PVector(randint(0, 600), 0))
+            #enemy_dict[f'{7}'](self, PVector(randint(0, 600), 1000))
             pass
         enemies = self.enemy_spawn_dict.get(str(self.frame))
         if enemies:

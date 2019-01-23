@@ -31,3 +31,12 @@ class SecondLieutenantWeapon0:
         SecondLieutenantBullet(enemy.game, pos + PVector(43, 90), 0)
         SecondLieutenantBullet(enemy.game, pos + PVector(43, 30), 0)
         SecondLieutenantBullet(enemy.game, pos + PVector(43, -40), 0)
+
+
+class SecondLieutenantWeapon1:
+    firing_angles = (0, 72, 72*2, 72*3, 72*4)  # Kind of like a rotating star
+
+    def __init__(self, enemy, pos):
+        for i in range(5):
+            SecondLieutenantBullet(enemy.game, pos + PVector(0, enemy.firing_positions[i]),
+                                   enemy.frame + self.firing_angles[i], 15)

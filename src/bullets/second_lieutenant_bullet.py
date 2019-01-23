@@ -10,10 +10,9 @@ from src.constants import GFX
 
 class SecondLieutenantBullet(EnemyBullet):
     speed = 5
-    size = 20
 
-    def __init__(self, game, pos, angle):
+    def __init__(self, game, pos, angle, size=20):
         super().__init__(game, pos)
         self.direction = PVector(0, 0).project(radians(angle), self.speed)
-        self.image = pygame.transform.scale(GFX['ebt3'], (self.size, self.size))
+        self.image = pygame.transform.scale(GFX['ebt3'], (size, size))
         self.rect = self.image.get_rect(center=tuple(self.pos))

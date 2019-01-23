@@ -3,6 +3,7 @@ from src.enemies.corporal_0 import Corporal0
 from src.enemies.private_0 import Private0
 from src.enemies.private_1 import Private1
 from src.enemies.second_lieutenant_0 import SecondLieutenant0
+from src.enemies.second_lieutenant_1 import SecondLieutenant1
 from src.enemies.sergeant_0 import Sergeant0
 from src.enemies.sergeant_1 import Sergeant1
 
@@ -12,5 +13,6 @@ enemy_dict = {
     "3": Corporal0,
     "4": Sergeant0,
     "5": Sergeant1,
-    "6": SecondLieutenant0
+    "6": SecondLieutenant0,
+    "7":SecondLieutenant1
 }

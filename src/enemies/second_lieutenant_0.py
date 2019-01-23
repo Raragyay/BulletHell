@@ -34,7 +34,7 @@ class SecondLieutenant0(Enemy):
         if self.frame % 200 > 150:
             self.direction = PVector(0, 0)
             if self.frame % 10 == 0:
-                SecondLieutenantWeapon0(self,self.pos)
+                self.shoot()
         else:
             self.direction = PVector(0, -self.speed)
 
@@ -48,3 +48,6 @@ class SecondLieutenant0(Enemy):
                 Coin(self.game, self.pos + PVector(randint(-25, 25), randint(-90, 90)))
             self.kill()
             self.hitbox.kill()
+
+    def shoot(self):
+        SecondLieutenantWeapon0(self, self.pos)
