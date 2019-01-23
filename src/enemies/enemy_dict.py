@@ -9,6 +9,7 @@ from src.enemies.second_lieutenant_0 import SecondLieutenant0
 from src.enemies.second_lieutenant_1 import SecondLieutenant1
 from src.enemies.sergeant_0 import Sergeant0
 from src.enemies.sergeant_1 import Sergeant1
+from src.special_effects.warning_sign import WarningSign
 
 enemy_dict = {
     "1" : Private0,
@@ -20,5 +21,6 @@ enemy_dict = {
     "7" : SecondLieutenant1,
     "8" : FirstLieutenant0,
     "9" : FirstLieutenant1,
-    "16": Boss1
+    "16": Boss1,
+    "21":WarningSign
 }
