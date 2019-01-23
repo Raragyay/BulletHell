@@ -81,7 +81,7 @@ class Level(State):
         self.continue_time = 10 * 60
         self.stage_transition = StageTransition(self.level_num)
         self.event_block = True
-        self.stage_clear = False
+        self.stage_clear = True
         self.show_label_timer = 0
 
         self.persist = persist
@@ -142,7 +142,6 @@ class Level(State):
                 self.stage_clear_effect()
             if self.players:
                 self.frame += 1
-            # TODO check stage clear
             self.player_choose_update()
             self.background.update()
             self.spawn_enemies()  # Spawn enemies will not spawn duplicates when frame is frozen since key is deleted.

@@ -6,6 +6,8 @@ import pygame
 from src import constants
 from src.states.control import Control
 from src.states.disclaimer import Disclaimer
+from src.states.entername import Entername
+from src.states.gameover import Gameover
 from src.states.highscore import Highscore
 from src.states.level import Level
 from src.state_machine import StateMachine
@@ -22,6 +24,8 @@ def main():
         'SELECT'    : Select(),
         'LEVEL 1'   : Level(1),
         'HIGHSCORE' : Highscore(),
+        'GAME OVER' : Gameover(),
+        'NAME':Entername()
     }
     state_machine.init_states(states, 'DISCLAIMER')
     # print('hi')

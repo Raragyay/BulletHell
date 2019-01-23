@@ -20,7 +20,7 @@ class Disclaimer(State):
 
     def startup(self, persist: dict):
         self.persist = persist
-        self.done=True#TODO REMOVE
+        self.done=False
 
     def cleanup(self):
         return {}

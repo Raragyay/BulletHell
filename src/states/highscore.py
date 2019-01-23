@@ -31,12 +31,14 @@ class Highscore(State):
         self.fade_away = False
         self.persist = persist
         with open(SCORE, 'r') as f:
-            self.scoreboard = json.load(f)
+            self.scoreboard = self.persist['scoreboard'] if 'scoreboard' in self.persist else json.load(f)
         self.labels = pygame.sprite.Group()
         self.init_labels()
         self.controls = self.persist['controls']
 
     def cleanup(self):
+        with open(SCORE, 'w') as f:
+            json.dump(self.scoreboard[:5], f)
         return self.persist.copy()
 
     def init_labels(self):
@@ -59,7 +61,7 @@ class Highscore(State):
 
         for entry, bottom_left, colour in zip(self.scoreboard, pos_3, colours):  # Score
             Label(str(entry[2]), {
-                'bottomleft': bottom_left}, self.labels, font_path=ARCADE_CLASSIC,
+                'bottomright': bottom_left}, self.labels, font_path=ARCADE_CLASSIC,
                   font_size=40,
                   text_colour=colour)
 

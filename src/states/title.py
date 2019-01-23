@@ -34,8 +34,8 @@ class Title(State):
         self.screen_saver = 0
 
     def startup(self, persist: dict):
-        self.done = True #TODO REMOVE
-        self.next='SELECT'#TODO THIS AS WELL
+        self.done = False
+        self.next = 'SELECT'
         self.persist = persist
         self.choice = self.persist.get('choice', {
             '1p': 0,
